@@ -1,0 +1,95 @@
+.materials {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.upload-section {
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+}
+
+.upload-section input {
+  padding: 0.8rem;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  margin-right: 1rem;
+  flex-grow: 1;
+}
+
+.upload-section button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.upload-section button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.upload-section button .btn-text {
+  font-weight: 600;
+}
+
+.upload-section button:hover {
+  background-color: #45a049;
+  transform: translateY(-2px);
+}
+
+.material-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.material-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.material-list span {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #333;
+}
+
+.material-list button {
+  padding: 0.4rem 1rem;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.material-list button:hover {
+  background-color: #b84639;
+  transform: translateY(-2px);
+}
+
+.material-list button:focus {
+  outline: none;
+}
+
+.material-list button .btn-text {
+  font-weight: 600;
+}

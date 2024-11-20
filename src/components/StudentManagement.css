@@ -1,0 +1,172 @@
+/* Base Styling */
+.student-management {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.student-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.student-card {
+  padding: 1.5rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.student-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #344955;
+}
+
+.form-group input, .form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.form-group textarea {
+  height: 100px;
+  resize: vertical;
+}
+
+.form-group input:focus, .form-group textarea:focus {
+  border-color: #dbac65;
+}
+
+/* Button Styling */
+button {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  background-color: #f9aa33;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #f6a029;
+}
+
+/* Table Styling */
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 2rem;
+}
+
+.student-table th, .student-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+}
+
+.student-table th {
+  background-color: #f4f4f4;
+}
+
+textarea, input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 5px;
+}
+
+/* New Styling for Grading Section */
+.grade-remark-section {
+  margin-top: 2rem;
+  background-color: #f9f9f9;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.grade-remark-section h4 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.grade-remark-section .grade-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.grade-remark-section .grade-form-group label {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #344955;
+}
+
+.grade-remark-section .grade-form-group input,
+.grade-remark-section .grade-form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-top: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.grade-remark-section .grade-form-group textarea {
+  height: 120px;
+  resize: vertical;
+}
+
+.grade-remark-section button {
+  background-color: #f9aa33;
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.grade-remark-section button:hover {
+  background-color: #f6a029;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .student-management {
+    padding: 1rem;
+  }
+
+  .student-list {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .student-card {
+    padding: 1rem;
+  }
+
+  .grade-remark-section {
+    padding: 1rem;
+  }
+
+  .grade-remark-section .grade-form-group input,
+  .grade-remark-section .grade-form-group textarea {
+    font-size: 0.9rem;
+  }
+}

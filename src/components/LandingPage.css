@@ -1,0 +1,272 @@
+/* General Body and Layout Styling */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  height: 100%; /* Ensure body takes up full height */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+}
+
+/* Landing Page Styling */
+.landing-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start; /* Ensure sections start from the top */
+  min-height: 100vh; /* Ensure full height for the landing page */
+  background-color: #f2f2c0; /* Set the same background color as the header */
+  padding-top: 4rem; /* Add padding for space under the header */
+  overflow: auto; /* Allow scrolling */
+}
+
+/* Header Styling */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 2rem;
+  background-color: #07003e; /* Header background color */
+  color: white;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Slight shadow for header */
+}
+
+/* Left section of Header (Logo/Text) */
+.header-left {
+  flex: 1;
+}
+
+.logo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: white;
+}
+
+/* Center section of Header (Navigation Menu) */
+.header-center {
+  flex: 2;
+  display: flex;
+  justify-content: center;
+}
+
+.navbar {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.nav-button:hover {
+  color: #74b9ff;
+}
+
+/* Right section of Header (Search Box) */
+.header-right {
+  flex: 1;
+  text-align: right;
+}
+
+.search-box {
+  padding: 8px;
+  font-size: 1rem;
+  width: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.search-box:focus {
+  border-color: #0984e3;
+}
+
+/* Hero Section */
+.hero-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Vertically center the content */
+  align-items: center; /* Horizontally center the content */
+  text-align: center;
+  margin-top: 3rem; /* Space for header */
+  min-height: 100vh; /* Ensure it takes full screen height */
+  padding: 0 2rem; /* Optional padding for content */
+}
+
+.main-title {
+  font-size: 3rem;
+  color: #00101c;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #00101c;
+  margin-bottom: 1rem;
+}
+
+.hero-tagline {
+  font-size: 1rem;
+  color: #00101c;
+  margin-bottom: 1rem;
+}
+
+
+/* Info Cards */
+.info-container {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 2rem; /* Ensure space after info cards */
+  min-height: 10vh; /* Full screen */
+}
+
+.info-card {
+  background-color: #07003e;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 200px;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+}
+
+.info-card h3 {
+  font-size: 1.5rem;
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.info-card p {
+  font-size: 1rem;
+  color: #e5eeb1;
+}
+
+/* Follow Us Section */
+.follow-us-section {
+  padding: 40px;
+  /*background-color: #f4f4f4; /* Light background to differentiate the section */
+}
+
+.follow-us-title {
+  font-family: 'Lobster', sans-serif;  /* Unique font for "Follow Us" */
+  font-size: 4rem;                    /* Large font size */
+  text-align: left;                   /* Align text to the left */
+  color: #2c3e50;                     /* Dark text color */
+  text-transform: uppercase;          /* Make the text uppercase */
+  letter-spacing: 5px;                /* Add spacing between letters */
+  margin-bottom: 20px;                /* Space below the title */
+  border-bottom: 3px solid #16a085;   /* Stylish underline effect */
+}
+
+.social-media-icons {
+  display: flex;
+  gap: 20px;                          /* Space between icons */
+  justify-content: flex-start;         /* Align icons to the left */
+  margin-bottom: 20px;                 /* Add some margin below icons */
+}
+
+.social-icon img {
+  width: 50px;                        /* Set the icon size */
+  height: 50px;                       /* Ensure the icons are uniform */
+  transition: transform 0.3s ease;     /* Smooth hover transition */
+}
+
+.social-icon img:hover {
+  transform: scale(1.1);               /* Slightly enlarge the icon on hover */
+}
+
+.social-handles {
+  font-size: 1.2rem;                   /* Adjust text size for handles */
+  color: #333;                         /* Dark text color */
+}
+
+.social-handles p {
+  margin: 5px 0;                       /* Space between handles */
+}
+
+.social-handles p span {
+  font-weight: bold;                   /* Bold the platform names */
+  color: #16a085;                      /* Add a color to platform names */
+}
+
+
+/* Optional: Responsive design adjustments */
+@media (max-width: 768px) {
+  .follow-us-title {
+    font-size: 3rem;                   /* Make the title smaller on smaller screens */
+  }
+
+  .social-media-icons {
+    flex-direction: column;            /* Stack the icons vertically on smaller screens */
+  }
+
+  .social-icon img {
+    width: 40px;                       /* Smaller icons on mobile */
+    height: 40px;
+  }
+}
+
+/* About Me Section */
+.about-me-section {
+  padding: 2rem;
+  background-color: #f2f2c0;
+  min-height: 100vh; /* Full screen */
+}
+
+.about-me-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.about-me-description {
+  font-size: 1.2rem;
+  color: #34495e;
+  line-height: 1.6;
+}
+
+/* New Section with "Students Excel with top-notch courses" */
+.third-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;  /* Align text to the left */
+  padding: 3rem 2rem;
+  background-color: #fff;
+  width: 100%;
+  text-align: left;  /* Align text left */
+}
+
+.third-screen .main-title {
+  font-size: 2.5rem;
+  color: #00101c;
+  margin-bottom: 1rem;
+}
+
+.third-screen .subtitle {
+  font-size: 1.2rem;
+  color: #2c3e50;
+}
+
+.third-screen .cta {
+  font-size: 1.1rem;
+  color: #0984e3;
+  margin-top: 1rem;
+  text-decoration: underline;
+}
