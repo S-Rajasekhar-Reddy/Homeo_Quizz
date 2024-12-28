@@ -71,7 +71,11 @@ const StudentSignup = () => {
 
         <button className="signup-button" onClick={handleSignup}>Sign Up</button>
 
-        <p>Already have an account? <a href="/student-login">Login</a></p>
+        <br>
+        </br>
+        <p align="center"> Already have an account? <a  href="/student-login">Login</a></p>
+        
+           
       </div>
     </div>
   );

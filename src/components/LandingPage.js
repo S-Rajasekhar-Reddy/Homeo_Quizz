@@ -27,13 +27,16 @@ const LandingPage = () => {
         </div>
         <div className="header-center">
           <div className="navbar">
-          
-            
           </div>
         </div>
+
+         {/*<button onClick={Student_Signin.html}>Student Sign Up</button>*/}
         <div className="header-right">
+        
           <input type="text" className="search-box" placeholder="Search..." />
         </div>
+
+
       </header>
 
       {/* Landing Page Content */}
@@ -43,9 +46,12 @@ const LandingPage = () => {
           <h1 className="main-title">Welcome to Homoe Universe</h1>
           <h2 className="subtitle">By DR. MANI PRASAD | AIR 38</h2>
           <p className="hero-tagline">Prepare for Success</p>
+          
           {/* Image for screen 2 */}
           <img src="1.jpeg" alt="Students" className="screen-image" /> 
         </div>
+        <br>
+        </br>
 
         {/* Second Screen (Students, Instructors, Community) with Image */}
         <div className="info-container">

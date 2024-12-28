@@ -77,9 +77,13 @@
   margin-top: 10px;
 }
 
+
+
 /* Media Queries */
 @media (max-width: 480px) {
   .login-card {
     padding: 1.5rem;
   }
+  
+
 }

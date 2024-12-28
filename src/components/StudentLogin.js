@@ -47,10 +47,14 @@ const StudentLogin = () => {
         {error && <div className="error-message">{error}</div>}
 
         <button className="login-button" onClick={handleLogin}>Login</button>
+        
 
-        <p>Don't have an account? <a href="/student-signup">Sign up</a></p>
+        <a href="/reset-password"> Forgot Password</a>
+
+       <p align="center">Don't have an account? <a href="/student-signup">Sign up</a></p>
       </div>
-    </div>
+      </div>
+    
   );
 };
 
