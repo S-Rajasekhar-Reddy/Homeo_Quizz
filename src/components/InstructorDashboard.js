@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'; // Import Link for navigation
+import { Link } from 'react-router-dom';
 import './InstructorDashboard.css';
 import StudentManagement from './StudentManagement';
 import Quizzes from './Quizzes';
@@ -13,12 +13,10 @@ const InstructorDashboard = () => {
   };
 
   const handleLogout = () => {
-    // Redirect to the login page without refreshing the page
     window.location.href = '/instructor-login';
   };
 
   const handleLogoClick = () => {
-    // Refresh the page when the logo is clicked
     window.location.reload();
   };
 
@@ -26,7 +24,6 @@ const InstructorDashboard = () => {
     <div className="dashboard">
       {/* Sidebar */}
       <aside className="sidebar">
-        {/* Clickable Logo that redirects to the default page (Instructor Hub) */}
         <Link to="/instructor-dashboard" className="logo" onClick={handleLogoClick}>
           Instructor<span>Hub</span>
         </Link>
