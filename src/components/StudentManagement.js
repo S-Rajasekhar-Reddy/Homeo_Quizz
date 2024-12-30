@@ -179,7 +179,10 @@ const StudentManagement = () => {
                   <td>{student.quizAttempts}</td>
                   <td>{student.passFail}</td>
                   <td>
-                    <button onClick={() => alert(`Viewing details for ${student.name}`)}>View Details</button>
+                    {/* Open student details in a new window */}
+                    <button onClick={() => window.open(`/student-details/${student.id}`, '_blank')}>
+                      View Details
+                    </button>
                   </td>
                 </tr>
               ))}
