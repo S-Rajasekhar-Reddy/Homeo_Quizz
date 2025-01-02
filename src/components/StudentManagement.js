@@ -3,10 +3,10 @@ import './StudentManagement.css';
 
 const StudentManagement = () => {
   const [students, setStudents] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', lastAttemptScore: '85%', avgScore: '80%', quizAttempts: 5, passFail: 'Passed', status: 'Approved' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', lastAttemptScore: '92%', avgScore: '89%', quizAttempts: 3, passFail: 'Passed', status: 'Approved' },
-    { id: 3, name: 'Alice Brown', email: 'alice@example.com', lastAttemptScore: '65%', avgScore: '70%', quizAttempts: 4, passFail: 'Failed', status: 'Denied' },
-    { id: 4, name: 'Bob White', email: 'bob@example.com', lastAttemptScore: '78%', avgScore: '76%', quizAttempts: 5, passFail: 'Passed', status: 'Approved' },
+    { id: 1, name: 'John Doe', email: 'john@example.com', avgScore: '80%', quizAttempts: 5, passFail: 'Passed', status: 'Approved' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', avgScore: '89%', quizAttempts: 3, passFail: 'Passed', status: 'Approved' },
+    { id: 3, name: 'Alice Brown', email: 'alice@example.com', avgScore: '70%', quizAttempts: 4, passFail: 'Failed', status: 'Denied' },
+    { id: 4, name: 'Bob White', email: 'bob@example.com', avgScore: '76%', quizAttempts: 5, passFail: 'Passed', status: 'Approved' },
   ]);
 
   const [selectedTab, setSelectedTab] = useState(null);
@@ -162,7 +162,6 @@ const StudentManagement = () => {
               <tr>
                 <th>Name</th>
                 <th>Email</th>
-                <th>Last Attempt Score</th>
                 <th>Average Score</th>
                 <th>Quiz Attempts</th>
                 <th>Pass/Fail</th>
@@ -174,7 +173,6 @@ const StudentManagement = () => {
                 <tr key={student.id}>
                   <td>{student.name}</td>
                   <td>{student.email}</td>
-                  <td>{student.lastAttemptScore}</td>
                   <td>{student.avgScore}</td>
                   <td>{student.quizAttempts}</td>
                   <td>{student.passFail}</td>
