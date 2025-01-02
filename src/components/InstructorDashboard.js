@@ -22,41 +22,37 @@ const InstructorDashboard = () => {
 
   return (
     <div className="dashboard">
-      {/* Sidebar */}
-      <aside className="sidebar">
+      {/* Header with navigation */}
+      <header className="header">
         <Link to="/instructor-dashboard" className="logo" onClick={handleLogoClick}>
           Instructor<span>Hub</span>
         </Link>
         
-        <nav className="nav">
+        <nav className="header-nav">
           <button
-            className={`nav-item ${activeSection === 'studentManagement' ? 'active' : ''}`}
+            className={`header-nav-item ${activeSection === 'studentManagement' ? 'active' : ''}`}
             onClick={() => handleSectionChange('studentManagement')}
           >
-            <i className="icon fas fa-users"></i>
             Student Management
           </button>
           <button
-            className={`nav-item ${activeSection === 'quiz' ? 'active' : ''}`}
+            className={`header-nav-item ${activeSection === 'quiz' ? 'active' : ''}`}
             onClick={() => handleSectionChange('quiz')}
           >
-            <i className="icon fas fa-question-circle"></i>
             Quizzes
           </button>
           <button
-            className={`nav-item ${activeSection === 'materials' ? 'active' : ''}`}
+            className={`header-nav-item ${activeSection === 'materials' ? 'active' : ''}`}
             onClick={() => handleSectionChange('materials')}
           >
-            <i className="icon fas fa-book"></i>
             Add Materials
           </button>
         </nav>
         
         <button className="logout-button" onClick={handleLogout}>
-          <i className="icon fas fa-sign-out-alt"></i>
           Logout
         </button>
-      </aside>
+      </header>
 
       {/* Main Content */}
       <main className="main-content">
@@ -73,7 +69,7 @@ const InstructorDashboard = () => {
             <div className="welcome">
               <h2>Welcome to Instructor Hub</h2>
               <p>
-                Select an option from the left menu to manage students, create quizzes, or upload materials.
+                Select an option from the menu to manage students, create quizzes, or upload materials.
               </p>
             </div>
           )}

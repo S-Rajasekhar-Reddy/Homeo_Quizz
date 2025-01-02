@@ -1,159 +1,182 @@
-/* Root Variables for Theme Colors */
-:root {
-  --primary-color: #344955; /* Navy Blue */
-  --secondary-color: #f9f9f9; /* Light Gray */
-  --accent-color: #f9aa33; /* Yellow-Gold */
-  --text-color: #232931;
-  --hover-color: #4a6572;
-  --white-color: #ffffff;
-  --danger-color: #ff5252;
-  --shadow-color: rgba(0, 0, 0, 0.1);
-}
-
-/* Global Styling */
-body {
-  margin: 0;
-  font-family: 'Roboto', sans-serif;
-  background-color: var(--secondary-color);
-}
-
-/* Dashboard Layout */
+/* General Dashboard Styles */
 .dashboard {
-  display: flex;
-  height: 100vh;
-}
-
-/* Sidebar Styling */
-.sidebar {
-  width: 300px;
-  background-color: var(--primary-color);
-  color: var(--white-color);
+  font-family: 'Arial', sans-serif;
   display: flex;
   flex-direction: column;
-  padding: 2rem 1.5rem;
-  box-shadow: 2px 0 10px var(--shadow-color);
+  min-height: 100vh;
+  background-color: #f5f7fa;
 }
 
-.logo {
-  font-size: 1.8rem;
+/* Header Styles with Gradient and Improved Shadows */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #091736, #091736); /* Gradient background */
+  color: white;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
+  height: 70px; /* Increased height for a more spacious look */
+  border-bottom: 2px solid #003f54; /* Added border to distinguish header */
+  position: sticky;
+  top: 0;
+  z-index: 100; /* Ensures the header stays on top */
+}
+
+.header .logo {
+  font-size: 28px;
   font-weight: bold;
-  text-align: center;
-  color: var(--accent-color);
-  margin-bottom: 2rem;
+  text-transform: uppercase; /* Adding text-transform for style */
+  letter-spacing: 1px; /* Spacing out letters for a more refined look */
 }
 
-.logo span {
-  color: var(--white-color);
-}
-
-.nav {
-  flex-grow: 1;
-}
-
-.nav-item {
+.header-nav {
   display: flex;
   align-items: center;
-  padding: 1rem 1.2rem;
-  margin-bottom: 1rem;
-  background: transparent;
+}
+
+.header-nav-item {
+  background: none;
   border: none;
-  color: var(--white-color);
-  font-size: 1rem;
-  font-weight: 500;
-  border-radius: 8px;
+  padding: 12px 25px;
+  margin-left: 30px;
+  font-size: 18px;
+  color: white;
   cursor: pointer;
+  position: relative;
   transition: all 0.3s ease;
 }
 
-.nav-item .icon {
-  margin-right: 1rem;
+.header-nav-item:hover {
+  background-color: rgba(0, 0, 0, 0.1); /* Subtle hover effect */
+  color: #fff;
 }
 
-.nav-item:hover,
-.nav-item.active {
-  background: var(--hover-color);
+.header-nav-item:before {
+  content: "";
+  position: absolute;
+  width: 0;
+  height: 2px;
+  background-color: white;
+  bottom: 0;
+  left: 50%;
+  transition: width 0.3s ease, left 0.3s ease;
 }
 
-.logout-button {
-  margin-top: 2rem;
-  padding: 0.8rem 1.2rem;
-  background: var(--danger-color);
-  color: var(--white-color);
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background 0.3s ease;
+.header-nav-item:hover:before {
+  width: 100%;
+  left: 0;
 }
 
-.logout-button:hover {
-  background: #d32f2f;
-}
-
-/* Main Content */
+/* Main Content Styles with Clean Layout */
 .main-content {
+  padding: 30px 50px;
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  background-color: var(--secondary-color);
-  padding: 2rem;
+  margin-top: 80px; /* Adjusted for more space */
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
 }
 
 .content-header {
-  font-size: 1.8rem;
-  font-weight: bold;
-  color: var(--text-color);
-  margin-bottom: 1.5rem;
-  border-bottom: 2px solid var(--accent-color);
-  padding-bottom: 0.5rem;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  color: #333;
+  text-align: center;
 }
 
 .content {
-  flex: 1;
-  background-color: var(--white-color);
-  padding: 2rem;
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+}
+
+/* Fixed Logout Button Styling with 3D Effect */
+.logout-button {
+  padding: 0.8rem 1.5rem;
+  background: #e53935; /* Red background */
+  color: white;
+  font-size: 1.1rem;
+  border: none;
   border-radius: 8px;
-  box-shadow: 0 4px 10px var(--shadow-color);
-}
-
-.welcome {
+  cursor: pointer;
+  width: auto;
+  min-width: 120px;
   text-align: center;
-  color: var(--text-color);
+  font-weight: 600;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Add shadow to make it stand out */
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease;
 }
 
-.welcome h2 {
-  font-size: 1.8rem;
-  margin-bottom: 1rem;
-  color: var(--primary-color);
+.logout-button:hover {
+  background: #d32f2f; /* Darker shade of red on hover */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Larger shadow for hover */
+  transform: translateY(-4px); /* 3D lift effect */
 }
 
-.welcome p {
-  font-size: 1.2rem;
-  color: var(--text-color);
+.logout-button:active {
+  transform: translateY(2px); /* Pressed effect */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .dashboard {
-    flex-direction: column;
+  .header {
+    padding: 10px 20px;
+    height: 60px;
   }
 
-  .sidebar {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 1rem;
-    box-shadow: none;
+  .header .logo {
+    font-size: 22px;
   }
 
-  .nav-item {
-    flex: 1;
-    margin: 0 0.5rem;
+  .header-nav-item {
+    font-size: 14px;
+    padding: 8px 15px;
+    margin-left: 15px;
   }
 
   .main-content {
-    padding: 1rem;
+    padding: 20px;
+    margin-top: 60px;
+  }
+
+  .content-header {
+    font-size: 24px;
+  }
+
+  .content {
+    padding: 20px;
+  }
+
+  .logout-button {
+    padding: 0.6rem 1.2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Mobile First Design */
+@media (max-width: 480px) {
+  .header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .header-nav {
+    margin-top: 10px;
+  }
+
+  .header-nav-item {
+    margin-left: 10px;
+    font-size: 14px;
+  }
+
+  .logout-button {
+    width: 100%;
+    margin-top: 15px;
   }
 }

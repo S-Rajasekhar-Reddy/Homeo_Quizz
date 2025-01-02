@@ -1,0 +1,87 @@
+/* Main container for the Grades component */
+.grades {
+    margin: 20px;
+    padding: 20px;
+    background-color: #f4f7fb;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .grades:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Title for the Grades section */
+  .grades h2 {
+    font-size: 28px;
+    color: #2e3a59;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  /* Styling for the table */
+  .grades-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Table header styling */
+  .grades-table th {
+    background-color: #3b5998;
+    color: #fff;
+    padding: 12px 15px;
+    text-align: left;
+    font-size: 16px;
+  }
+  
+  /* Table cell styling */
+  .grades-table td {
+    padding: 12px 15px;
+    text-align: left;
+    color: #555;
+    font-size: 15px;
+  }
+  
+  /* Hover effect on table rows */
+  .grades-table tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+  
+  /* Styling for the passed and failed statuses */
+  .passed {
+    color: #28a745;
+  }
+  
+  .failed {
+    color: #dc3545;
+  }
+  
+  /* Styling for the loading state */
+  .grades .loading {
+    font-size: 18px;
+    text-align: center;
+    color: #888;
+  }
+  
+  /* Add media queries for responsiveness */
+  @media (max-width: 768px) {
+    .grades h2 {
+      font-size: 22px;
+    }
+  
+    .grades-table th, .grades-table td {
+      padding: 8px;
+    }
+  
+    .grades-table {
+      font-size: 14px;
+    }
+  }
+  
