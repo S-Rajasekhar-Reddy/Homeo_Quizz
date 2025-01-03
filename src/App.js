@@ -11,6 +11,7 @@ import StudentDetails from './components/StudentDetails';
 import Profile from './components/Profile';
 import Grades from './components/Grades';
 import Materials from './components/Materials';
+import CommunityPage from './components/CommunityPage';
 
 
 
@@ -23,6 +24,7 @@ const App = () => {
         <Route path="/student-login" element={<StudentLogin />} />
         <Route path="/student-signup" element={<StudentSignup />} />
         <Route path="/instructor-login" element={<InstructorLogin />} />
+        <Route path="/community" element={<CommunityPage />} /> {/* Community page */}
         <Route path="/instructor-dashboard" element={<InstructorDashboard />} /> {/* Add InstructorDashboard route */}
         <Route path="/student-dashboard" element={<StudentDashboard />} />
         <Route path="/reset-password" element={<ResetPassword />} />

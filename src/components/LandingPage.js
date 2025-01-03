@@ -12,7 +12,6 @@ const LandingPage = () => {
     title: 'Welcome to Homeoguide',
     subtitle: 'By DR. MANI PRASAD | AIR 38',
     tagline: 'Prepare for Success',
-    image: '1.jpeg',
   });
 
   useEffect(() => {

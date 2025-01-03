@@ -13,7 +13,7 @@ body {
   align-items: center;
   justify-content: flex-start; /* Ensure sections start from the top */
   min-height: 100vh; /* Ensure full height for the landing page */
-  background-color: #f2f2c0; /* Set the same background color as the header */
+  background-color: #ffffff; /* Set the same background color as the header */
   padding-top: 4rem; /* Add padding for space under the header */
   overflow: auto; /* Allow scrolling */
 }
@@ -84,8 +84,6 @@ body {
   color: #07003e;
   font-weight: bold; /* Optional: emphasize hover state */
 }
-
-
 /* Hero Section */
 .hero-section {
   display: flex;
@@ -93,7 +91,7 @@ body {
   justify-content: center; /* Vertically center the content */
   align-items: center; /* Horizontally center the content */
   text-align: center;
-  margin-top: 3rem; /* Space for header */
+  margin-top: 1rem; /* Adjust the top space for the entire hero section */
   min-height: 100vh; /* Ensure it takes full screen height */
   padding: 0 2rem; /* Optional padding for content */
 }
@@ -101,19 +99,19 @@ body {
 .main-title {
   font-size: 3rem;
   color: #00101c;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.2rem; /* Adjust the space between title and subtitle */
 }
 
 .subtitle {
   font-size: 1.2rem;
   color: #00101c;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Adjust the space between subtitle and tagline */
 }
 
 .hero-tagline {
   font-size: 1rem;
   color: #00101c;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem; /* Adjust the space below tagline */
 }
 
 
@@ -124,7 +122,6 @@ body {
   justify-content: center;
   width: 100%;
   margin-bottom: 2rem; /* Ensure space after info cards */
-  min-height: 10vh; /* Full screen */
 }
 
 .info-card {
@@ -156,31 +153,31 @@ body {
 
 /* Follow Us Section */
 .follow-us-section {
-  padding: 40px;
-  /*background-color: #f4f4f4; /* Light background to differentiate the section */
+  padding: 50px 2rem;
+  text-align: center;  /* Center the content */
 }
 
 .follow-us-title {
-  font-family: 'Lobster', sans-serif;  /* Unique font for "Follow Us" */
-  font-size: 4rem;                    /* Large font size */
-  text-align: left;                   /* Align text to the left */
-  color: #2c3e50;                     /* Dark text color */
-  text-transform: uppercase;          /* Make the text uppercase */
-  letter-spacing: 5px;                /* Add spacing between letters */
-  margin-bottom: 20px;                /* Space below the title */
-  border-bottom: 3px solid #16a085;   /* Stylish underline effect */
+  font-family: 'Roboto', sans-serif;  /* Clean and modern font */
+  font-size: 3.5rem;                  /* Larger font size for emphasis */
+  color: #07003e;                     /* Darker text color */
+  font-weight: bold;                  /* Make the title bold */
+  text-transform: uppercase;          /* Keep text uppercase for uniformity */
+  letter-spacing: 3px;                /* Slight spacing for readability */
+  margin-bottom: 30px;                /* Add space below the title */
+  border-bottom: 4px solid #16a085;   /* Stylish underline with a modern color */
 }
 
 .social-media-icons {
   display: flex;
-  gap: 20px;                          /* Space between icons */
-  justify-content: flex-start;         /* Align icons to the left */
-  margin-bottom: 20px;                 /* Add some margin below icons */
+  justify-content: center;            /* Center the icons horizontally */
+  gap: 20px;                          /* Add space between icons */
+  margin-top: 20px;                   /* Space between title and icons */
 }
 
 .social-icon img {
-  width: 50px;                        /* Set the icon size */
-  height: 50px;                       /* Ensure the icons are uniform */
+  width: 50px;
+  height: 50px;
   transition: transform 0.3s ease;     /* Smooth hover transition */
 }
 
@@ -189,7 +186,7 @@ body {
 }
 
 .social-handles {
-  font-size: 1.2rem;                   /* Adjust text size for handles */
+  font-size: 1.2rem;
   color: #333;                         /* Dark text color */
 }
 
@@ -200,6 +197,23 @@ body {
 .social-handles p span {
   font-weight: bold;                   /* Bold the platform names */
   color: #16a085;                      /* Add a color to platform names */
+}
+
+/* Optional: Responsive design adjustments */
+@media (max-width: 768px) {
+  .follow-us-title {
+    font-size: 2.5rem;                 /* Smaller font size for mobile screens */
+  }
+
+  .social-media-icons {
+    flex-direction: column;            /* Stack the icons vertically */
+    gap: 10px;                          /* Reduced gap on smaller screens */
+  }
+
+  .social-icon img {
+    width: 40px;                       /* Smaller icons */
+    height: 40px;
+  }
 }
 
 
@@ -217,13 +231,22 @@ body {
     width: 40px;                       /* Smaller icons on mobile */
     height: 40px;
   }
+
+  .info-container {
+    flex-direction: column;            /* Stack the info cards vertically on small screens */
+  }
+
+  .info-card {
+    width: 100%;                       /* Full width on mobile */
+    margin-bottom: 1rem;
+  }
 }
 
 /* About Me Section */
 .about-me-section {
   padding: 2rem;
-  background-color: #f2f2c0;
-  min-height: 100vh; /* Full screen */
+  background-color: #ffffff;
+  min-height: 10vh; /* Full screen */
 }
 
 .about-me-title {
@@ -235,34 +258,4 @@ body {
   font-size: 1.2rem;
   color: #34495e;
   line-height: 1.6;
-}
-
-
-.third-screen {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;  /* Align text to the left */
-  padding: 3rem 2rem;
-  background-color: #fff;
-  width: 100%;
-  text-align: left;  /* Align text left */
-}
-
-.third-screen .main-title {
-  font-size: 2.5rem;
-  color: #00101c;
-  margin-bottom: 1rem;
-}
-
-.third-screen .subtitle {
-  font-size: 1.2rem;
-  color: #2c3e50;
-}
-
-.third-screen .cta {
-  font-size: 1.1rem;
-  color: #0984e3;
-  margin-top: 1rem;
-  text-decoration: underline;
 }

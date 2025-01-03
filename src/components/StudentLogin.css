@@ -1,3 +1,4 @@
+
 /* Basic Reset */
 * {
   margin: 0;
@@ -13,7 +14,7 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(135deg, #f2f2c0, #f2f2c0); /* Gradient Background */
+  background: linear-gradient(135deg, #ffffff, #ffffff); /* Gradient Background */
 }
 
 /* Card Style */
