@@ -25,7 +25,7 @@ const StudentSignup = () => {
     } else {
       setError('');
       // Proceed with signup logic or API call
-      navigate('/student-login');  // Redirect to Student Login after successful signup
+      navigate('/login');  // Redirect to Student Login after successful signup
     }
   };
 
@@ -73,7 +73,7 @@ const StudentSignup = () => {
 
         <br>
         </br>
-        <p align="center"> Already have an account? <a  href="/student-login">Login</a></p>
+        <p align="center"> Already have an account? <a  href="/login">Login</a></p>
         
            
       </div>

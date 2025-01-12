@@ -55,7 +55,7 @@ const ResetPassword = () => {
     setTimeout(() => {
       setLoading(false);
       setMessage('Password reset successfully!');
-      navigate('/student-login');  // Redirect to login page after password reset
+      navigate('/login');  // Redirect to login page after password reset
     }, 2000);
   };
 

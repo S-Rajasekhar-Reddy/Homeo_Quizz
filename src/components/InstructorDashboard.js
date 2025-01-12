@@ -13,7 +13,7 @@ const InstructorDashboard = () => {
   };
 
   const handleLogout = () => {
-    window.location.href = '/instructor-login';
+    window.location.href = '/login';
   };
 
   const handleLogoClick = () => {
