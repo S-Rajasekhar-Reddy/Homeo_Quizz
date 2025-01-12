@@ -20,21 +20,21 @@ const LandingPage = () => {
     const hour = new Date().getHours();
     if (hour < 12) {
       setHeroContent({
-        title: 'Good Morning, Welcome to Homeoguide!',
+        title: 'Good Morning, Welcome to Homeoguide',
         subtitle: 'Start your day with success.',
         tagline: 'Achieve your goals with us.',
         image: 'morning.jpeg',
       });
     } else if (hour < 18) {
       setHeroContent({
-        title: 'Good Afternoon, Welcome to Homeoguide!',
+        title: 'Good Afternoon, Welcome to Homeoguide',
         subtitle: 'Keep learning and growing.',
         tagline: 'Your journey to success continues.',
         image: 'afternoon.jpeg',
       });
     } else {
       setHeroContent({
-        title: 'Good Evening, Welcome to Homeoguide!',
+        title: 'Good Evening, Welcome to Homeoguide',
         subtitle: 'Relax and prepare for tomorrow.',
         tagline: 'Your future starts here.',
         image: 'evening.jpeg',
@@ -43,8 +43,7 @@ const LandingPage = () => {
   }, []);
 
   // Navigation handlers
-  const handleStudentClick = () => navigate('/student-login');
-  const handleInstructorClick = () => navigate('/instructor-login');
+  const handleLoginClick = () => navigate('/login');
   const handleCommunityClick = () => navigate('/community');
 
   const scrollToFollowUs = () => {
@@ -66,7 +65,7 @@ const LandingPage = () => {
           </span>
         </div>
         <div className="header-right">
-          <span className="header-link" onClick={handleStudentClick}>
+          <span className="header-link" onClick={handleLoginClick}>
             Login/Signup
           </span>
           <span className="header-link" onClick={scrollToFollowUs}>
@@ -86,12 +85,12 @@ const LandingPage = () => {
 
         {/* Info Cards */}
         <div className="info-container">
-          <div className="info-card" data-aos="flip-left" onClick={handleStudentClick}>
+          <div className="info-card" data-aos="flip-left" onClick={handleLoginClick}>
             <h3>Students</h3>
             <p>Excel with top-notch courses.</p>
           </div>
 
-          <div className="info-card" data-aos="flip-left" onClick={handleInstructorClick}>
+          <div className="info-card" data-aos="flip-left" onClick={handleLoginClick}>
             <h3>Instructors</h3>
             <p>Empower and guide minds.</p>
           </div>
@@ -123,12 +122,12 @@ const LandingPage = () => {
               <img src="facebook.png" alt="Facebook" />
             </a>
             <a
-              href="https://linktr.ee/homoeouniverse"
+              href="https://linkedin.com/homoeouniverse"
               target="_blank"
               rel="noopener noreferrer"
               className="social-icon"
             >
-              <img src="linktree.png" alt="Linktree" />
+              <img src="linkedin.png" alt="Linkedin" />
             </a>
           </div>
         </div>

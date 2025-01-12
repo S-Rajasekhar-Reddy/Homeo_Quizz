@@ -13,8 +13,7 @@ const CommunityPage = () => {
   }, []);
 
   // Navigation Handlers
-  const handleStudentClick = () => navigate('/student-login');
-  const handleInstructorClick = () => navigate('/instructor-login');
+  const handleLoginClick = () => navigate('/login');
   const handleBackToHomeClick = () => navigate('/'); // Add this handler
 
   return (
@@ -27,7 +26,7 @@ const CommunityPage = () => {
           </span>
         </div>
         <div className="header-right">
-          <span className="header-link" onClick={handleStudentClick}>
+          <span className="header-link" onClick={handleLoginClick}>
             Login/Signup
           </span>
           <span className="header-link" onClick={handleBackToHomeClick}> {/* Use the handler here */}

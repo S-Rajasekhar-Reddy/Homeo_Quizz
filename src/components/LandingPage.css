@@ -176,7 +176,7 @@ body {
 }
 
 .social-icon img {
-  width: 50px;
+  width: fit-content;
   height: 50px;
   transition: transform 0.3s ease;     /* Smooth hover transition */
 }

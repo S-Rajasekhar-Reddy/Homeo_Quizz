@@ -19,7 +19,7 @@ const StudentDashboard = () => {
 
   const handleLogout = () => {
     // Redirect to the login page without refreshing the page
-    window.location.href = '/student-login';
+    window.location.href = '/';
   };
 
   return (
