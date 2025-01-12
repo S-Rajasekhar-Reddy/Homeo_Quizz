@@ -1,6 +1,10 @@
 const express=require('express');
+const cors = require('cors');
 const mysql = require('mysql2');
 app=express();
+
+// Enable CORS for all routes and origins
+app.use(cors());
 
 app.use(express.json());
 
@@ -19,18 +23,24 @@ connection.connect((err) => {
 });
 
 app.post('/login',(req, res)=>{
-    const {username,password,type}=req.body;
-    console.log(username,password,type);
+    const {username,password}=req.body;
     connection.query('SELECT * FROM credentials where Username=\''+username+'\'', (err, results) => {    
         if (err) {
           console.error('Error executing query:', err);``
           res.status(500).send('Error retrieving data from database');
           return;
         }
-        if(password!=results[0].Password&&type!=results[0].Account_Type){
+        if(results.length==0){
+          console.error('Incorrect Username');
+          res.status(400).send('invalid credentials');
+          return;
+        }
+        else if(password!=results[0].Password){
           console.error('Incorrect Password');
           res.status(400).send('invalid credentials');
+          return;
         }
+        else
         res.status(200).json(results);
       });    
 });
