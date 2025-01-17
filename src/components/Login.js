@@ -11,14 +11,14 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:4000/login", {
-        method: "POST", // HTTP method
+      const response = await fetch("http://localhost:4000/login", { // change the database address to prod
+        method: "POST",
         headers: {
           'Accept': 'application/json',
-          "Content-Type": "application/json", // Ensure the server knows you're sending JSON
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({ username: userName,
-          password: passWord, }), // Convert the body to a JSON string
+          password: passWord, }),
       });
 
       if (!response.ok) {
