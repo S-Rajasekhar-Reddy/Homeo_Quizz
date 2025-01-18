@@ -77,6 +77,10 @@ const Login = () => {
 
         {/* Show success message when login is successful */}
         {success && <div className="success-message">Login Successful</div>}
+        <a href="/reset-password"> Forgot Password</a>
+
+<p align="center">Don't have an account? <a href="/student-signup">Sign up</a></p>
+
       </div>
     </div>
   );

@@ -42,6 +42,38 @@ const StudentSignup = () => {
           value={formData.username}
           onChange={handleInputChange}
         />
+         <input
+          type="text"
+          name="firstname"
+          className="signup-input"
+          placeholder="First Name"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="lastname"
+          className="signup-input"
+          placeholder="Last Name"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="fullname"
+          className="signup-input"
+          placeholder="Full Name"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
+        <input
+          type="text"
+          name="mobilenum"
+          className="signup-input"
+          placeholder="Mobile Number"
+          value={formData.username}
+          onChange={handleInputChange}
+        />
         <input
           type="email"
           name="email"
