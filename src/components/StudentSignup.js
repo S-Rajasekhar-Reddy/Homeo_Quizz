@@ -6,6 +6,10 @@ const StudentSignup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
+    firstname:'',
+    lastname:'',
+    fullname:'',
+    mobile:'',
     email: '',
     password: '',
     confirmPassword: ''
@@ -18,7 +22,7 @@ const StudentSignup = () => {
 
   const handleSignup = () => {
     // Dummy validation (replace with actual logic)
-    if (!formData.username || !formData.email || !formData.password || !formData.confirmPassword) {
+    if (!formData.username || !formData.firstname|| !formData.lastname|| !formData.fullname||!formData.mobile||!formData.email || !formData.password || !formData.confirmPassword) {
       setError('All fields are required!');
     } else if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match!');
@@ -47,7 +51,7 @@ const StudentSignup = () => {
           name="firstname"
           className="signup-input"
           placeholder="First Name"
-          value={formData.username}
+          value={formData.firstname}
           onChange={handleInputChange}
         />
         <input
@@ -55,7 +59,7 @@ const StudentSignup = () => {
           name="lastname"
           className="signup-input"
           placeholder="Last Name"
-          value={formData.username}
+          value={formData.lastname}
           onChange={handleInputChange}
         />
         <input
@@ -63,15 +67,15 @@ const StudentSignup = () => {
           name="fullname"
           className="signup-input"
           placeholder="Full Name"
-          value={formData.username}
+          value={formData.fullname}
           onChange={handleInputChange}
         />
         <input
-          type="text"
-          name="mobilenum"
+          type="tel"
+          name="mobile"
           className="signup-input"
           placeholder="Mobile Number"
-          value={formData.username}
+          value={formData.mobile}
           onChange={handleInputChange}
         />
         <input

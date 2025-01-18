@@ -73,13 +73,13 @@ const Login = () => {
           />
           {error && <div className="error-message">{error}</div>}
           <button type="submit" className="login-button" onClick={handleLogin}>Login</button>
+
+            {/* Show success message when login is successful */}
+            {success && <div className="success-message">Login Successful</div>}
+            <a href="/reset-password" className="login-input"> Forgot Password</a>
+
+          <p align="center" className="login-input">Don't have an account? <a href="/student-signup">Sign up</a></p>
         </div>
-
-        {/* Show success message when login is successful */}
-        {success && <div className="success-message">Login Successful</div>}
-        <a href="/reset-password"> Forgot Password</a>
-
-<p align="center">Don't have an account? <a href="/student-signup">Sign up</a></p>
 
       </div>
     </div>
