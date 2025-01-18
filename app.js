@@ -64,13 +64,14 @@ app.get('/studentDetails', (req,res)=>{
 app.post('/createQuiz',(req,res)=>{
   const data=req.body;
   const query ='CREATE TABLE '+ data.quizName +'('
-    +'Question_Number int,\n'
+    +'Question_Number int NOT NULL AUTO_INCREMENT,\n'
     +'Question varchar(255),\n'
     +'Option1 varchar(255),\n'
     +'Option2 varchar(255),\n'
     +'Option3 varchar(255),\n'
     +'Option4 varchar(255),\n'
-    +'Correct_Answer varchar(255)'+');';
+    +'Correct_Answer varchar(255),\n'
+    +'PRIMARY KEY (Question_Number))';
   connection.query(query,(err)=>{
     if (err) {
       console.error('Error executing query:', err);
@@ -97,7 +98,11 @@ app.post('/createQuiz',(req,res)=>{
 
 app.post('/addQuizData',(req,res)=>{
   const data=req.body;
-  connection.query('', (results)=>{
+  results=[];
+  for ( const item of data){
+    results.push(runQuery(item));
+  }
+  connection.query('SELECT * FROM '+data[0].quizName, (err, results) => {
     if (err) {
       console.error('Error executing query:', err);
       res.status(500).send('Error retrieving data from database');
@@ -111,7 +116,7 @@ app.get('/getStudentAccessList', (req,res)=>{
   connection.query('SELECT * FROM student_access',(err,results)=>{
     if(err){
       console.error('Error executing query:',err);
-      res.status(500).send('Error updating student access');
+      res.status(500).send('Error getting student access details');
       return;
     }
     res.status(200).json(results);
@@ -131,10 +136,10 @@ app.post('/updateAccess', (req,res)=>{
 });
 
 app.get('/studentQuizDetails',(req,res)=>{
-  connection.query('',(err,results)=>{
+  connection.query('SELECT * FROM student_grade',(err,results)=>{
     if(err){
       console.error('Error executing query:',err);
-      res.status(500).send('Error updating student access');
+      res.status(500).send('Error getting student grade details');
       return;
     }
     res.json(results);
@@ -151,13 +156,6 @@ app.post('/signup', (req,res)=>{
     console.log('Connected to MySQL database!');
   });
     const data=req.body;
-    connection.query("INSERT INTO credentials(student_name, Email , status) VALUES (?,?,'s')",data.username,data.email,'PENDING',(err)=>{
-        if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).send('Error retrieving data from database');
-            return;
-          }
-    });
     connection.query("INSERT INTO credentials(Username, Email , Pwd, Account_type) VALUES (?,?,?,'s')",data.username,data.email,data.password,(err)=>{
         if (err) {
             console.error('Error executing query:', err);
@@ -179,3 +177,15 @@ app.post('/signup', (req,res)=>{
 app.listen(4000, ()=>{
     console.log("port 4000");
 });
+
+function runQuery(item){
+  connection.query('INSERT INTO '+item.quizName+'(Question,Option1,Option2,Option3,Option4,Correct_Answer) VALUES (?,?,?,?,?,?)',[item.question,item.option1,item.option2,item.option3,item.option4,item.correctAnswer] ,(err,results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    return results;
+});
+  return;
+}
