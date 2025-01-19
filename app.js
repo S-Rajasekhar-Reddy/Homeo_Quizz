@@ -156,14 +156,23 @@ app.post('/signup', (req,res)=>{
     console.log('Connected to MySQL database!');
   });
     const data=req.body;
-    connection.query("INSERT INTO credentials(Username, Email , Pwd, Account_type) VALUES (?,?,?,'s')",data.username,data.email,data.password,(err)=>{
+    id=null;
+    connection.query("INSERT INTO credentials(Username, Email , Pwd, Account_type) VALUES (?,?,?,'s')",data.username,data.email,data.password,(err,results)=>{
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error retrieving data from database');
+            return;
+          }
+          id=results[0].Id;
+    });
+    connection.query("INSERT INTO Student_details(Id, Username, Email , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?)",id,data.username,data.email,data.firstName,data.lastName,data.fullName,data.phoneNum,(err)=>{
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send('Error retrieving data from database');
             return;
           }
     });
-    connection.query('SELECT * FROM quiz_index where credentials=\''+data.username+'\'', (err) => {
+    connection.query('SELECT * FROM Student_details where credentials=\''+id+'\'', (err) => {
       if (err) {
         console.error('Error executing query:', err);
         res.status(500).send('Error retrieving data from database');
