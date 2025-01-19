@@ -84,6 +84,19 @@ app.get('/getStudentDetails/:studentId', (req,res)=>{
     });
 });
 
+app.post('/updateStudentDetails/:studentId', (req,res)=>{
+  const studentId=req.params.studentId;
+  const data=req.body;
+  connection.query('UPDATE Student_Details set Email='+data.email+',PhoneNum='+data.phoneNum+'where Id='+studentId, (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        res.status(500).send('Error retrieving data from database');
+        return;
+      }
+      res.status(200).send({"status":'Student Details Updated'});
+    });
+});
+
 app.post('/createQuiz',(req,res)=>{
   const data=req.body;
   const query ='CREATE TABLE '+ data.quizName +'('
@@ -180,6 +193,18 @@ app.get('/studentQuizDetails',(req,res)=>{
   });
 });
 
+app.get('/studentGrades/:studentId',(req,res)=>{
+  const studentId=req.params.studentId;
+  connection.query('SELECT * FROM student_grade where Id='+studentId, (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        res.status(500).send('Error retrieving data from database');
+        return;
+      }
+      res.json(results);
+    });
+});
+
 app.post('/signup', (req,res)=>{
   connection.connect((err) => {
     if (err) {
@@ -253,7 +278,7 @@ app.post('/studentQuizSubmit',(req,res)=>{
     userName=results[0].Username;
     studentName=results[0].Student_Name;
   });
-  connection.query('INSERT INTO student_grade(Id,Username,Student_Name,Quiz_Number,Quiz_Name,Grade,Max_Grade,Date_Attempted) VALUES (?,?,?,?,?,?)',data.studentId,data.quizNumber,data.quizName,data.grade,data.maxGrade,data.date,(err)=>{
+  connection.query('INSERT INTO student_grade(Id,Username,Student_Name,Quiz_Number,Quiz_Name,Grade,Max_Grade,Date_Attempted) VALUES (?,?,?,?,?,?,?,?)',data.studentId,data.quizNumber,data.quizName,data.grade,data.maxGrade,data.date,(err)=>{
     if(err){
       console.error('Error executing query:',err);
       res.status(500).send('Error submitting quiz');
