@@ -27,11 +27,6 @@ const StudentManagement = () => {
     }
   };
 
-  // Handle delete confirmation
-  const handleDeleteStudent = (studentId) => {
-    setStudentToDelete(studentId);
-    setShowDeleteAlert(true);
-  };
 
   const confirmDelete = () => {
     setStudents(students.filter(student => student.id !== studentToDelete));
@@ -126,7 +121,6 @@ const StudentManagement = () => {
                         <button onClick={() => handleStatusChange(student.id, 'Approved')}>Approve</button>
                       </>
                     )}
-                    <button onClick={() => handleDeleteStudent(student.id)}>Delete</button>
                   </td>
                 </tr>
               ))}
