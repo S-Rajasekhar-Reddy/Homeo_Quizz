@@ -11,7 +11,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  database: 'homeo'
+  database: 'project_homeo'
 });
 
 app.post('/login',(req, res)=>{
@@ -73,7 +73,7 @@ app.get('/getStudentDetails', (req,res)=>{
 });
 
 app.get('/getStudentDetails/:studentId', (req,res)=>{
-  const studentId=req.params;
+  const studentId=req.params.studentId;
   connection.query('SELECT * FROM Student_Details where Id='+studentId, (err, results) => {
       if (err) {
         console.error('Error executing query:', err);
@@ -135,7 +135,7 @@ app.get('/getQuizes',(req,res)=>{
 });
 
 app.get('/getQuizes/:quizName',(req,res)=>{
-  const quizName=req.params;
+  const quizName=req.params.quizName;
   connection.query('SELECT * FROM '+quizName, (err,results) => {
     if(err) {
       console.error('Error retrieving data');
@@ -218,7 +218,7 @@ app.post('/signup', (req,res)=>{
 });
 
 app.get('/getQuizDetails/:studentId',(req,res)=>{
-  const studentId=req.params;
+  const studentId=req.params.studentId;
   quizList=[];
   studentQuizTable=[];
   connection.query('SELECT * FROM student_grade where Id='+studentId, (err, results) => {
