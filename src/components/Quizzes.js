@@ -39,9 +39,20 @@ const Quizzes = () => {
     }
 
     const updatedQuizzes = [...quizzes];
-    const quizIndex = updatedQuizzes.findIndex(quiz => quiz.name === currentQuiz);
+    const quizIndex = updatedQuizzes.findIndex(quiz => quiz.quizName === currentQuiz);
     if (quizIndex !== -1) {
-      updatedQuizzes[quizIndex].questions.push({ question, options, correctAnswer });
+      const questionObject = {
+        question,
+        correctAnswer
+      };
+      
+      // Dynamically assign options as options1, options2, etc.
+      options.forEach((option, index) => {
+        questionObject[`option${index + 1}`] = option;
+      });
+      
+      // Push the object to the question list
+      updatedQuizzes[quizIndex].questionList.push(questionObject);
     }
 
     setQuizzes(updatedQuizzes);
@@ -57,15 +68,15 @@ const Quizzes = () => {
     }
 
     // Check if a quiz with the same name already exists
-    const existingQuiz = quizzes.find(quiz => quiz.name.toLowerCase() === quizName.toLowerCase());
+    const existingQuiz = quizzes.find(quiz => quiz.quizName.toLowerCase() === quizName.toLowerCase());
     if (existingQuiz) {
       alert('A quiz with this name already exists. Please choose a different name.');
       return;
     }
 
     const newQuiz = {
-      name: quizName,
-      questions: [],
+      quizName: quizName,
+      questionList: [],
     };
 
     setQuizzes([...quizzes, newQuiz]);
@@ -74,9 +85,32 @@ const Quizzes = () => {
     setIsCreatingQuiz(true);
   };
 
-  const handleQuizClose = () => {
+  const handleQuizClose = async () => {
     setIsCreatingQuiz(false);
     setCurrentQuiz(null);
+    console.log(quizzes[0]);
+    try {
+      const response = await fetch("http://localhost:4000/createQuiz", { // change the database address to prod
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(quizzes[0]),
+      });
+      
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
+      }
+
+      alert('Success');
+
+    } catch (err) {
+      setSuccess(false);
+      console.error("Database Connection failed", err);
+    }
+
   };
 
   const handleQuizClick = (index) => {
@@ -85,7 +119,7 @@ const Quizzes = () => {
 
   const handleEditQuestion = (quizIndex, questionIndex) => {
     const quiz = quizzes[quizIndex];
-    const questionToEdit = quiz.questions[questionIndex];
+    const questionToEdit = quiz.questionList[questionIndex];
 
     setEditQuestionIndex(questionIndex);
     setEditedQuestion(questionToEdit.question);
@@ -101,7 +135,7 @@ const Quizzes = () => {
 
     const updatedQuizzes = [...quizzes];
     const quiz = updatedQuizzes[quizIndex];
-    quiz.questions[questionIndex] = {
+    quiz.questionList[questionIndex] = {
       question: editedQuestion,
       options: editedOptions,
       correctAnswer: editedCorrectAnswer,
@@ -215,10 +249,10 @@ const Quizzes = () => {
             quizzes.map((quiz, index) => (
               <div key={index} className="quiz-preview-item">
                 <h4 onClick={() => handleQuizClick(index)} className="quiz-name">
-                  {quiz.name}
+                  {quiz.quizName}
                 </h4>
                 <button onClick={() => handleDeleteQuiz(index)}>Delete Quiz</button>
-                <button onClick={() => setEditedQuizName(quiz.name)}>Edit Name</button>
+                <button onClick={() => setEditedQuizName(quiz.quizName)}>Edit Name</button>
                 {editedQuizName && (
                   <div>
                     <input
@@ -231,7 +265,7 @@ const Quizzes = () => {
                 )}
                 {selectedQuizIndex === index && (
                   <ul>
-                    {quiz.questions.map((quizQuestion, idx) => (
+                    {quiz.questionList.map((quizQuestion, idx) => (
                       <li key={idx}>
                         <h5>{quizQuestion.question}</h5>
                         <ul>
