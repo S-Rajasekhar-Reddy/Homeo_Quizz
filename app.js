@@ -86,23 +86,11 @@ app.post('/createQuiz',(req,res)=>{
       return;
     }
   });
-  connection.query('SELECT * FROM quiz_index where Quiz_Name=\''+data.quizName+'\'', (err, results) => {
-    if (err) {
-      console.error('Error executing query:', err);
-      res.status(500).send('Error retrieving data from database');
-      return;
-    }
-    res.status(200).json(results);
-  });
-});
-
-app.post('/addQuizData',(req,res)=>{
-  const data=req.body;
   results=[];
-  for ( const item of data){
-    results.push(runQuery(item));
+  for ( const item of data.questionList){
+    results.push(runQuery(data.quizName, item));
   }
-  connection.query('SELECT * FROM '+data[0].quizName, (err, results) => {
+  connection.query('SELECT * FROM '+data.quizName, (err, results) => {
     if (err) {
       console.error('Error executing query:', err);
       res.status(500).send('Error retrieving data from database');
@@ -187,8 +175,8 @@ app.listen(4000, ()=>{
     console.log("port 4000");
 });
 
-function runQuery(item){
-  connection.query('INSERT INTO '+item.quizName+'(Question,Option1,Option2,Option3,Option4,Correct_Answer) VALUES (?,?,?,?,?,?)',[item.question,item.option1,item.option2,item.option3,item.option4,item.correctAnswer] ,(err,results) => {
+function runQuery(tableName, item){
+  connection.query('INSERT INTO '+tableName+'(Question,Option1,Option2,Option3,Option4,Correct_Answer) VALUES (?,?,?,?,?,?)',[item.question,item.option1,item.option2,item.option3,item.option4,item.correctAnswer] ,(err,results) => {
     if (err) {
       console.error('Error executing query:', err);
       res.status(500).send('Error retrieving data from database');
