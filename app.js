@@ -136,7 +136,7 @@ app.get('/getQuizes',(res)=>{
 
 app.get('/getQuizes/:quizName',(req,res)=>{
   const quizName=req.params;
-  connection.query('SELECT * FROM quizName', (err,results) => {
+  connection.query('SELECT * FROM '+quizName, (err,results) => {
     if(err) {
       console.error('Error retrieving data');
       res.status(500).send('Error retrieving data from database');
