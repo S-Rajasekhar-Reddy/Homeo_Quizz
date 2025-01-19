@@ -11,51 +11,51 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:4000/login", { // change the database address to prod
+      const response = await fetch("http://localhost:4000/login", {
         method: "POST",
         headers: {
           'Accept': 'application/json',
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ username: userName,
-          password: passWord, }),
+        body: JSON.stringify({
+          username: userName,
+          password: passWord,
+        }),
       });
 
       if (!response.ok) {
-        // If the response status is not ok (e.g., 400 or 401), throw an error
         setSuccess(false);
         throw new Error("Invalid credentials. Please try again.");
       }
 
       const data = await response.json();
-      // Handle successful login (e.g., save token, redirect)
 
       if (data[0].Account_type === 'i') {
         setSuccess(true);
-        setError(''); // Clear any previous error
+        setError('');
         setTimeout(() => {
-          // Make sure this path matches the one defined in App.js
           navigate('/instructor-dashboard');
         }, 1000);
       } else {
         setSuccess(true);
-        setError(''); // Clear any previous error
+        setError('');
         setTimeout(() => {
-          // Make sure this path matches the one defined in App.js
           navigate('/student-dashboard');
         }, 1000);
       }
     } catch (err) {
       setSuccess(false);
-      console.error("Login failed", err);
-      setError(err.message); // Set error message for display
+      setError(err.message);
     }
   };
 
   return (
     <div className="login-container">
+      <div className="homeoguide-heading">
+        <h1 className="homeoguide-title">HOMEOGUIDE</h1> {/* Added HOMEOGUIDE heading */}
+      </div>
       <div className="login-card">
-        <h2>Login</h2>
+        <h4>Login</h4>
         <div>
           <input
             type="text"
@@ -74,13 +74,21 @@ const Login = () => {
           {error && <div className="error-message">{error}</div>}
           <button type="submit" className="login-button" onClick={handleLogin}>Login</button>
 
-            {/* Show success message when login is successful */}
-            {success && <div className="success-message">Login Successful</div>}
-            <a href="/reset-password" className="login-input"> Forgot Password</a>
+          {success && <div className="success-message">Login Successful</div>}
 
-          <p align="center" className="login-input">Don't have an account? <a href="/student-signup">Sign up</a></p>
+          {/* Spacing between login button and forgot password */}
+          <div className="forgot-password">
+            <a href="/reset-password">Forgot Password</a>
+          </div>
+
+          {/* Horizontal Divider */}
+          <div className="divider">---or--</div>
+
+          {/* Don't have an account section */}
+          <p align="center" className="signup-link">
+            Don't have an account? <a href="/student-signup">Sign up</a>
+          </p>
         </div>
-
       </div>
     </div>
   );
