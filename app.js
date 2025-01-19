@@ -11,7 +11,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  database: 'homeo'
+  database: 'Project_Homeo'
 });
 
 app.post('/login',(req, res)=>{
@@ -123,7 +123,7 @@ app.post('/createQuiz',(req,res)=>{
   });
 });
 
-app.get('/getQuizes',(res)=>{
+app.get('/getQuizes',(req,res)=>{
   connection.query('SELECT * FROM quiz_index', (err,results) => {
     if(err) {
       console.error('Error retrieving data');
