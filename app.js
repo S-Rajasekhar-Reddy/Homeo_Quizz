@@ -100,6 +100,29 @@ app.post('/createQuiz',(req,res)=>{
   });
 });
 
+app.get('/getQuizes',(res)=>{
+  connection.query('SELECT * FROM quiz_index', (err,results) => {
+    if(err) {
+      console.error('Error retrieving data');
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    res.status(200).json(results);
+  });
+});
+
+app.get('/getQuizes/:quizName',(req,res)=>{
+  const quizName=req.params;
+  connection.query('SELECT * FROM quizName', (err,results) => {
+    if(err) {
+      console.error('Error retrieving data');
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    res.status(200).json(results);
+  });
+});
+
 app.get('/getStudentAccessList', (req,res)=>{
   connection.query('SELECT * FROM student_access',(err,results)=>{
     if(err){
