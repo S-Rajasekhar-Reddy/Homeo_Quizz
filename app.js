@@ -11,7 +11,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  database: 'Project_Homeo'
+  database: 'homeo'
 });
 
 app.post('/login',(req, res)=>{
@@ -40,8 +40,19 @@ app.post('/login',(req, res)=>{
           res.status(400).send('invalid credentials');
           return;
         }
+        else if(results[0].Account_type=='s'){
+          connection.query('SELECT * FROM student_details where credentials=\''+results[0].Id+'\'', (err, results) => {
+            if (err) {
+              console.error('Error executing query:', err);
+              res.status(500).send('Error retrieving data from database');
+              return;
+            }
+            res.status(200).send({"studentName":results[0].fullName,"studentId":results[0].Id});
+              
+        });
+        }
         else
-        res.status(200).json(results);
+        res.status(200).send({'login':'true'});
       });    
 });
 
@@ -50,7 +61,7 @@ app.get('/signout',(res,req)=>{
     res.status(200).send('successfully logged out')
 });
 
-app.get('/studentDetails', (req,res)=>{
+app.get('/getStudentDetails', (req,res)=>{
     connection.query('SELECT * FROM Student_Details', (err, results) => {
         if (err) {
           console.error('Error executing query:', err);
@@ -59,6 +70,18 @@ app.get('/studentDetails', (req,res)=>{
         }
         res.json(results);
       });    
+});
+
+app.get('/getStudentDetails/:studentId', (req,res)=>{
+  const studentId=req.params;
+  connection.query('SELECT * FROM Student_Details where Id='+studentId, (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        res.status(500).send('Error retrieving data from database');
+        return;
+      }
+      res.json(results);
+    });
 });
 
 app.post('/createQuiz',(req,res)=>{
