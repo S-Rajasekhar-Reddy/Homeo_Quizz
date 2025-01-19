@@ -11,7 +11,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  database: 'Project_Homeo'
+  database: 'homeo'
 });
 
 app.post('/login',(req, res)=>{
@@ -41,13 +41,13 @@ app.post('/login',(req, res)=>{
           return;
         }
         else if(results[0].Account_type=='s'){
-          connection.query('SELECT * FROM student_details where credentials=\''+results[0].Id+'\'', (err, results) => {
+          connection.query('SELECT * FROM student_details where id=\''+results[0].Id+'\'', (err, newResults) => {
             if (err) {
               console.error('Error executing query:', err);
               res.status(500).send('Error retrieving data from database');
               return;
             }
-            res.status(200).send({"studentName":results[0].fullName,"studentId":results[0].Id});
+            res.status(200).send({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Account_type":results[0].Account_type});
               
         });
         }
@@ -215,6 +215,52 @@ app.post('/signup', (req,res)=>{
       res.status(200).send({'status':'Account Created Successfully!'});
     });
     connection.end();
+});
+
+app.get('/getQuizDetails/:studentId',(req,res)=>{
+  const studentId=req.params;
+  quizList=[];
+  studentQuizTable=[];
+  connection.query('SELECT * FROM student_grade where Id='+studentId, (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        res.status(500).send('Error retrieving data from database');
+        return;
+      }
+      studentQuizTable=results;
+    });
+  connection.query('SELECT * FROM quiz_index', (err,results) => {
+    if(err) {
+      console.error('Error retrieving data');
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    quizList=results;
+  });
+  res.status(200).send({"quizList":quizList,"studentQuizTable":studentQuizTable});
+});
+
+app.post('/studentQuizSubmit',(req,res)=>{
+  const data=req.body;
+  userName='';
+  studentName='';
+  connection.query('SELECT * FROM student_details where id=\''+data.studentId+'\'', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    userName=results[0].Username;
+    studentName=results[0].Student_Name;
+  });
+  connection.query('INSERT INTO student_grade(Id,Username,Student_Name,Quiz_Number,Quiz_Name,Grade,Max_Grade,Date_Attempted) VALUES (?,?,?,?,?,?)',data.studentId,data.quizNumber,data.quizName,data.grade,data.maxGrade,data.date,(err)=>{
+    if(err){
+      console.error('Error executing query:',err);
+      res.status(500).send('Error submitting quiz');
+      return;
+    }
+    res.status(200).send({"message":"Quiz Submitted"});
+  });
 });
 
 app.listen(4000, ()=>{
