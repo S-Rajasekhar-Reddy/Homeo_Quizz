@@ -15,8 +15,6 @@ const StudentManagement = () => {
   const [statusFilter, setStatusFilter] = useState('All');
 
   const [isSaving, setIsSaving] = useState(false);
-  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
-  const [studentToDelete, setStudentToDelete] = useState(null);
 
   // Handle tab change
   const handleTabChange = (tab) => {
@@ -28,14 +26,6 @@ const StudentManagement = () => {
   };
 
 
-  const confirmDelete = () => {
-    setStudents(students.filter(student => student.id !== studentToDelete));
-    setShowDeleteAlert(false);
-  };
-
-  const cancelDelete = () => {
-    setShowDeleteAlert(false);
-  };
 
   // Handle status filter
   const handleStatusFilterChange = (e) => {
@@ -127,16 +117,6 @@ const StudentManagement = () => {
             </tbody>
           </table>
 
-          {/* Delete Confirmation */}
-          {showDeleteAlert && (
-            <div className="delete-alert-overlay">
-              <div className="delete-alert">
-                <p>Are you sure you want to delete this student?</p>
-                <button onClick={confirmDelete}>Yes, Delete</button>
-                <button onClick={cancelDelete}>Cancel</button>
-              </div>
-            </div>
-          )}
         </div>
       )}
 

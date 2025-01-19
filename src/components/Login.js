@@ -30,7 +30,7 @@ const Login = () => {
 
       const data = await response.json();
 
-      if (data[0].Account_type === 'i') {
+      if (data.Account_type === 'i') {
         setSuccess(true);
         setError('');
         setTimeout(() => {

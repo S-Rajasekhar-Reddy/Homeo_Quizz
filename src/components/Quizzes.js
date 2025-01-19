@@ -6,6 +6,7 @@ const Quizzes = () => {
   const [isShowingQuizzes, setIsShowingQuizzes] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
   const [quizName, setQuizName] = useState('');
+  const [quizList, setQuizList] = useState('');
   const [question, setQuestion] = useState('');
   const [options, setOptions] = useState(['', '', '', '']);
   const [correctAnswer, setCorrectAnswer] = useState('');
@@ -15,7 +16,6 @@ const Quizzes = () => {
   const [editedQuestion, setEditedQuestion] = useState('');
   const [editedOptions, setEditedOptions] = useState(['', '', '', '']);
   const [editedCorrectAnswer, setEditedCorrectAnswer] = useState('');
-  const [editedQuizName, setEditedQuizName] = useState('');
 
   const handleOptionChange = (index, value) => {
     const updatedOptions = [...options];
@@ -27,9 +27,6 @@ const Quizzes = () => {
     setQuizName(e.target.value);
   };
 
-  const handleQuizEditNameChange = (e) => {
-    setEditedQuizName(e.target.value);
-  };
 
   const handleSubmitQuestion = (e) => {
     e.preventDefault();
@@ -88,7 +85,6 @@ const Quizzes = () => {
   const handleQuizClose = async () => {
     setIsCreatingQuiz(false);
     setCurrentQuiz(null);
-    console.log(quizzes[0]);
     try {
       const response = await fetch("http://localhost:4000/createQuiz", { // change the database address to prod
         method: "POST",
@@ -104,21 +100,46 @@ const Quizzes = () => {
         throw new Error("No database Connection. Please try again.");
       }
 
-      alert('Success');
-
     } catch (err) {
-      setSuccess(false);
       console.error("Database Connection failed", err);
     }
 
   };
 
-  const handleQuizClick = (index) => {
-    setSelectedQuizIndex(selectedQuizIndex === index ? null : index); // Toggle quiz visibility
+  const handleQuizClick = async (quizName, index) => {
+    try {
+      const response = await fetch("http://localhost:4000/getQuizes/"+quizName, { // change the database address to prod
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+        }
+      });
+      
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
+      }
+
+      const rawQuizData = await response.json();
+      rawQuizData.forEach((quiz) => {
+        quizList[index].questionList.push({
+        question: quiz.Question,
+        correctAnswer: quiz.Correct_Answer,
+        options: [quiz.Option1, quiz.Option2, quiz.Option3, quiz.Option4]})
+      });
+      
+      setSelectedQuizIndex(selectedQuizIndex === index ? null : index); // Toggle quiz visibility
+
+
+    } catch (err) {
+      console.error("Database Connection failed", err);
+    }
+
   };
 
   const handleEditQuestion = (quizIndex, questionIndex) => {
-    const quiz = quizzes[quizIndex];
+    const quiz = quizList[quizIndex];
     const questionToEdit = quiz.questionList[questionIndex];
 
     setEditQuestionIndex(questionIndex);
@@ -127,37 +148,75 @@ const Quizzes = () => {
     setEditedCorrectAnswer(questionToEdit.correctAnswer);
   };
 
-  const handleSaveEditedQuestion = (quizIndex, questionIndex) => {
+  const handleSaveEditedQuestion = async (quizIndex, questionIndex, quizName) => {
     if (!editedQuestion || editedOptions.some(option => option === '') || !editedCorrectAnswer) {
       alert('Please fill in all fields');
       return;
     }
 
-    const updatedQuizzes = [...quizzes];
-    const quiz = updatedQuizzes[quizIndex];
-    quiz.questionList[questionIndex] = {
-      question: editedQuestion,
-      options: editedOptions,
-      correctAnswer: editedCorrectAnswer,
-    };
+    try {
+      const updatedQuizzes = [...quizList];
+      const quiz = updatedQuizzes[quizIndex];
+      quiz.questionList[questionIndex] = {
+        question: editedQuestion,
+        options: editedOptions,
+        correctAnswer: editedCorrectAnswer,
+      };
 
-    setQuizzes(updatedQuizzes);
-    setEditQuestionIndex(null);
-    setEditedQuestion('');
-    setEditedOptions(['', '', '', '']);
-    setEditedCorrectAnswer('');
+      const response = await fetch("http://localhost:4000/updateQuiz", { // change the database address to prod
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          quizName: quizName,
+          questionList: quiz.questionList[questionIndex]}),
+      });
+      
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
+      }
+
+      setQuizzes(updatedQuizzes);
+      setEditQuestionIndex(null);
+      setEditedQuestion('');
+      setEditedOptions(['', '', '', '']);
+      setEditedCorrectAnswer('');
+
+    } catch (err) {
+      console.error("Database Connection failed", err);
+    }
   };
 
-  const handleDeleteQuiz = (quizIndex) => {
-    const updatedQuizzes = quizzes.filter((_, index) => index !== quizIndex);
-    setQuizzes(updatedQuizzes);
-  };
 
-  const handleSaveEditedQuizName = (quizIndex) => {
-    const updatedQuizzes = [...quizzes];
-    updatedQuizzes[quizIndex].name = editedQuizName;
-    setQuizzes(updatedQuizzes);
-    setEditedQuizName('');
+  const handleShowQuizClick = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/getQuizes", { // change the database address to prod
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+        }
+      });
+      
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
+      }
+
+      const rawQuizData = await response.json();
+      const transformedQuizData = rawQuizData.map(quiz => ({
+        quizName: quiz.Quiz_Name,
+        questionList: []
+      }));
+      setQuizList(transformedQuizData);
+      setIsShowingQuizzes(!isShowingQuizzes);
+
+    } catch (err) {
+      console.error("Database Connection failed", err);
+    }
   };
 
   return (
@@ -165,7 +224,7 @@ const Quizzes = () => {
       <button onClick={() => setIsCreatingQuiz(!isCreatingQuiz)} className="create-quiz-button">
         {isCreatingQuiz ? 'Close Create Quiz' : 'Create Quiz'}
       </button>
-      <button onClick={() => setIsShowingQuizzes(!isShowingQuizzes)} className="show-quiz-button">
+      <button onClick={handleShowQuizClick} className="show-quiz-button">
         {isShowingQuizzes ? 'Close Existing Quizzes' : 'Show Existing Quizzes'}
       </button>
 
@@ -245,24 +304,13 @@ const Quizzes = () => {
       {isShowingQuizzes && (
         <div className="quiz-list-container">
           <h3>Existing Quizzes</h3>
-          {quizzes.length > 0 ? (
-            quizzes.map((quiz, index) => (
+          {quizList.length > 0 ? (
+            quizList.map((quiz, index) => (
               <div key={index} className="quiz-preview-item">
-                <h4 onClick={() => handleQuizClick(index)} className="quiz-name">
+                <h4 onClick={() => handleQuizClick(quiz.quizName, index)} className="quiz-name">
                   {quiz.quizName}
                 </h4>
-                <button onClick={() => handleDeleteQuiz(index)}>Delete Quiz</button>
-                <button onClick={() => setEditedQuizName(quiz.quizName)}>Edit Name</button>
-                {editedQuizName && (
-                  <div>
-                    <input
-                      type="text"
-                      value={editedQuizName}
-                      onChange={handleQuizEditNameChange}
-                    />
-                    <button onClick={() => handleSaveEditedQuizName(index)}>Save Name</button>
-                  </div>
-                )}
+
                 {selectedQuizIndex === index && (
                   <ul>
                     {quiz.questionList.map((quizQuestion, idx) => (
@@ -305,7 +353,7 @@ const Quizzes = () => {
                                 <option key={oIdx} value={option}>{option}</option>
                               ))}
                             </select>
-                            <button onClick={() => handleSaveEditedQuestion(index, idx)}>Save Edits</button>
+                            <button onClick={() => handleSaveEditedQuestion(index, idx, quiz.quizName)}>Save Edits</button>
                           </div>
                         )}
                       </li>
