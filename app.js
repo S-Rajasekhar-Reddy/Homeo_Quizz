@@ -1,7 +1,14 @@
 const express=require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+
 app=express();
+
+dotenv.config();
+
+process.env.TOKEN_SECRET;
 
 // Enable CORS for all routes and origins
 app.use(cors());
@@ -24,7 +31,8 @@ app.post('/login',(req, res)=>{
     console.log('Connected to MySQL database!');
   });
     const {username,password}=req.body;
-    connection.query('SELECT * FROM credentials where Username=\''+username+'\'', (err, results) => {    
+    connection.query('SELECT * FROM credentials where Username=\''+username+'\'', (err, results) => { 
+        
         if (err) {
           console.error('Error executing query:', err);``
           res.status(500).send('Error retrieving data from database');
@@ -41,18 +49,21 @@ app.post('/login',(req, res)=>{
           return;
         }
         else if(results[0].Account_type=='s'){
+          const token = generateAccessToken({ username: username });   
           connection.query('SELECT * FROM student_details where id=\''+results[0].Id+'\'', (err, newResults) => {
             if (err) {
               console.error('Error executing query:', err);
               res.status(500).send('Error retrieving data from database');
               return;
             }
-            res.status(200).send({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Account_type":results[0].Account_type});
+            res.status(200).send({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Account_type":results[0].Account_type,"token":token});
               
         });
         }
-        else
-        res.status(200).send({'login':'true'});
+        else{
+          const token = generateAccessToken({ username: username });   
+          res.status(200).send({'login':'true',"token":token});
+        }        
       });    
 });
 
@@ -126,6 +137,25 @@ app.post('/createQuiz',(req,res)=>{
   for ( const item of data.questionList){
     results.push(runQuery(data.quizName, item));
   }
+  connection.query('SELECT * FROM '+data.quizName, (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    res.status(200).json(results);
+  });
+});
+
+app.post('/updateQuiz',(req,res)=>{
+  const data=req.body;
+  connection.query('UPDATE '+data.quizName+' SET Question=?,Option1=?,Option2=?,Option3=?,Option4=?,Correct_Answer=? WHERE Question_Number=?',data.question,data.option1,data.option2,data.option3,data.option4,data.correctAnswer,data.questionNumber,(err)=>{
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Error updating quiz data in database');
+      return;
+    }
+  });
   connection.query('SELECT * FROM '+data.quizName, (err, results) => {
     if (err) {
       console.error('Error executing query:', err);
@@ -302,4 +332,8 @@ function runQuery(tableName, item){
     return results;
 });
   return;
+}
+
+function generateAccessToken(username) {
+  return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '5400s' });
 }
