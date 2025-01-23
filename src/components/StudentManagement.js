@@ -89,6 +89,7 @@ const StudentManagement = (props) => {
     ));
   };
 
+  // REDO: below filter results functionality is getting crashed due to tolowercase conversion when integrated with backend
   // Filter students based on status
   // const filteredStudents = students.filter(student => {
   //   const matchesSearch = student.name.toLowerCase().includes(searchTerm) || student.email.toLowerCase().includes(searchTerm);
