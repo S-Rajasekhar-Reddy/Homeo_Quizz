@@ -3,6 +3,7 @@ const cors = require('cors');
 const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
+const CryptoJS = require('crypto-js');
 
 app=express();
 
@@ -30,7 +31,8 @@ app.post('/login',(req, res)=>{
     }
     console.log('Connected to MySQL database!');
   });
-    const {username,password}=req.body;
+    const username=req.body.username;
+    const password=decryptPassword(req.body.password);
     connection.query('SELECT * FROM credentials where Username=\''+username+'\'', (err, results) => { 
         
         if (err) {
@@ -336,4 +338,9 @@ function runQuery(tableName, item){
 
 function generateAccessToken(username) {
   return jwt.sign(username, process.env.TOKEN_SECRET, { expiresIn: '5400s' });
+}
+
+function decryptPassword(password){
+  const bytes  = CryptoJS.AES.decrypt(password, process.env.TOKEN_SECRET);
+  return bytes.toString(CryptoJS.enc.Utf8);
 }
