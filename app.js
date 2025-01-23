@@ -199,7 +199,7 @@ app.post('/updateQuiz',(req,res)=>{
                 );
               }
   const data=req.body;
-  connection.query('UPDATE '+data.quizName+' SET Question=?,Option1=?,Option2=?,Option3=?,Option4=?,Correct_Answer=? WHERE Question_Number=?',data.question,data.option1,data.option2,data.option3,data.option4,data.correctAnswer,data.questionNumber,(err)=>{
+  connection.query('UPDATE '+data.quizName+' SET Question=?,Option1=?,Option2=?,Option3=?,Option4=?,Correct_Answer=? WHERE Question_Number=?',[data.question,data.option1,data.option2,data.option3,data.option4,data.correctAnswer,data.questionNumber],(err)=>{
     if (err) {
       console.error('Error executing query:', err);
       res.status(500).send('Error updating quiz data in database');
