@@ -17,7 +17,7 @@
   color: white;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2); /* More pronounced shadow */
   height: 70px; /* Increased height for a more spacious look */
-  border-bottom: 2px solid #003f54; /* Added border to distinguish header */
+  border-bottom: 0px solid #003f54; /* Added border to distinguish header */
   position: sticky;
   top: 0;
   z-index: 100; /* Ensures the header stays on top */

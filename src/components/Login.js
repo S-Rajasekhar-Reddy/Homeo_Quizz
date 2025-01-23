@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
@@ -30,17 +30,17 @@ const Login = () => {
 
       const data = await response.json();
 
-      if (data.Account_type === 'i') {
+      if (data.Account_type === 's') {
         setSuccess(true);
         setError('');
         setTimeout(() => {
-          navigate('/instructor-dashboard');
+          navigate('/student-dashboard');
         }, 1000);
       } else {
         setSuccess(true);
         setError('');
         setTimeout(() => {
-          navigate('/student-dashboard');
+          navigate('/instructor-dashboard');
         }, 1000);
       }
     } catch (err) {
@@ -49,45 +49,89 @@ const Login = () => {
     }
   };
 
+  const handleMouseMove = (e) => {
+    const imageSection = document.querySelector('.image-section');
+    const mouseX = e.clientX;
+    const mouseY = e.clientY;
+
+    const { left, top, width, height } = imageSection.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+
+    const deltaX = (mouseX - centerX) / width;
+    const deltaY = (mouseY - centerY) / height;
+
+    imageSection.style.transform = `rotateX(${deltaY * 15}deg) rotateY(${deltaX * 15}deg)`;
+  };
+
+  // Dynamically duplicate the images for the cloning effect
+  useEffect(() => {
+    const imageSection = document.querySelector('.image-section');
+    const images = Array.from(imageSection.querySelectorAll('.side-image'));
+
+    const clonedImages = images.map((image) => {
+      const clone = image.cloneNode(true);
+      return clone;
+    });
+
+    clonedImages.forEach((clone) => {
+      imageSection.appendChild(clone); // Append each cloned image to the container
+    });
+  }, []);
+
   return (
     <div className="login-container">
       <div className="homeoguide-heading">
-        <h1 className="homeoguide-title">HOMEOGUIDE</h1> {/* Added HOMEOGUIDE heading */}
+        <h1 className="homeoguide-title">HOMEOGUIDE</h1>
       </div>
-      <div className="login-card">
-        <h4>Login</h4>
-        <div>
-          <input
-            type="text"
-            placeholder="Username"
-            value={userName}
-            onChange={(e) => setUsername(e.target.value)}
-            className="login-input"
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={passWord}
-            onChange={(e) => setPassword(e.target.value)}
-            className="login-input"
-          />
-          {error && <div className="error-message">{error}</div>}
-          <button type="submit" className="login-button" onClick={handleLogin}>Login</button>
+      <div className="login-section">
+        <div className="login-card">
+          <h4>Login</h4>
+          <div>
+            <input
+              type="text"
+              placeholder="Username"
+              value={userName}
+              onChange={(e) => setUsername(e.target.value)}
+              className="login-input"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={passWord}
+              onChange={(e) => setPassword(e.target.value)}
+              className="login-input"
+            />
+            {error && <div className="error-message">{error}</div>}
+            <button type="submit" className="login-button" onClick={handleLogin}>Login</button>
 
-          {success && <div className="success-message">Login Successful</div>}
+            {success && <div className="success-message">Login Successful</div>}
 
-          {/* Spacing between login button and forgot password */}
-          <div className="forgot-password">
-            <a href="/reset-password">Forgot Password</a>
+            <div className="forgot-password">
+              <a href="/reset-password">Forgot Password</a>
+            </div>
+
+            <div className="divider">---or--</div>
+
+            <p align="center" className="signup-link">
+              Don't have an account? <a href="/student-signup">Sign up</a>
+            </p>
           </div>
+        </div>
 
-          {/* Horizontal Divider */}
-          <div className="divider">---or--</div>
+        <div
+          className="image-section"
+          onMouseMove={handleMouseMove} // Add mouse move event here
+        >
+          <img src="/11.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/12.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/13.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/14.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/15.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/16.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/17.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/18.jpg" alt="Homeopathy" className="side-image" />
 
-          {/* Don't have an account section */}
-          <p align="center" className="signup-link">
-            Don't have an account? <a href="/student-signup">Sign up</a>
-          </p>
         </div>
       </div>
     </div>

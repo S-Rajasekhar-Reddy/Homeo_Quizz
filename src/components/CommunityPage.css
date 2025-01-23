@@ -4,6 +4,20 @@
     background-color: #f9f9f9;
   }
   
+  .header-right {
+    display: flex;
+    gap: 1.5rem; /* Adjust as needed */
+}
+
+.header-link {
+  cursor: pointer; /* Makes it behave like a button */
+  text-decoration: none; 
+  color: inherit; /* Keeps the color unchanged */
+}
+.header-link:hover {
+  color: #ffd700; /* Gold hover effect */
+}
+
   .section-title {
     font-size: 2rem;
     color: #2c3e50;

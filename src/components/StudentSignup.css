@@ -8,69 +8,92 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* Container Style */
+/* Background Image with Animated Gradient Overlay */
 .signup-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: linear-gradient(135deg, #f0f3f4, #c5e1e7); 
-  padding: 10px;
+  background: url('/public/signupbg/8.jpg') no-repeat center center/cover;
+  position: relative;
+  overflow: hidden;
 }
 
-/* HOMEOGUIDE Title Styling */
-.homeoguide-title {
-  font-size: 2.5rem;
-  font-weight: 600;
-  color: #34495e; /* Dark gray for professionalism */
-  margin-bottom: 20px;
-  text-align: center;
-  text-transform: uppercase;
+/* Subtle Gradient Overlay Animation */
+.signup-container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, rgba(240, 243, 244, 0.6), rgba(197, 225, 231, 0.8));
+  animation: gradientFade 6s infinite alternate ease-in-out;
+  z-index: 1;
 }
+
+@keyframes gradientFade {
+  0% {
+    background: linear-gradient(135deg, rgba(156, 225, 249, 0.6), rgba(3, 11, 12, 0.8));
+  }
+  100% {
+    background: linear-gradient(135deg, rgba(24, 0, 0, 0.8), rgba(44, 91, 107, 0.6));
+  }
+}
+
 
 /* Signup Card */
 .signup-card {
-  background-color: #ffffff;
+  background-color: rgba(255, 255, 255, 0.95);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   max-width: 450px;
   width: 100%;
   text-align: center;
   position: relative;
+  z-index: 2;
   opacity: 0;
-  animation: fadeIn 1s ease-in-out forwards;
+  animation: fadeIn 1s ease-in-out forwards, slideUp 1s ease-in-out;
 }
 
 /* Fade-In Animation for Signup Card */
 @keyframes fadeIn {
-  0% {
+  from {
     opacity: 0;
     transform: translateY(-50px);
   }
-  100% {
+  to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+/* Slide-up effect for form */
+@keyframes slideUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* Updated Title for Account Creation */
 .account-title {
-  font-size: 1.1rem; /* Slightly smaller size */
+  font-size: 1.2rem;
   font-weight: bold;
-  text-transform: lowercase;
+  text-transform: capitalize;
   color: #2c3e50;
   margin-bottom: 0.5rem;
 }
 
-.account-title::first-letter {
-  text-transform: uppercase;
-}
-
 /* Updated Subtitle */
 .quick-easy-text {
-  font-size: 0.75rem; /* Smaller subtitle */
+  font-size: 0.85rem;
   color: #7f8c8d;
   margin-bottom: 1.5rem;
 }
@@ -94,13 +117,13 @@
   border-radius: 8px;
   font-size: 1rem;
   transition: 0.3s ease-in-out;
-  color: #2c3e50; /* Darker text for readability */
+  color: #2c3e50;
 }
 
 .signup-input:focus {
-  border-color: #2980b9; /* Calming blue */
+  border-color: #2980b9;
   outline: none;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
 }
 
 /* Button Style */
@@ -114,7 +137,7 @@
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: 0.3s ease-in-out;
+  transition: background 0.3s ease-in-out, transform 0.2s;
   margin-top: 20px;
 }
 
@@ -166,6 +189,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 10;
 }
 
 .popup-content {
