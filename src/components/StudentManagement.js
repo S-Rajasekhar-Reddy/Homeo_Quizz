@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import './StudentManagement.css';
 
-const StudentManagement = () => {
-  const [students, setStudents] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', avgScore: '80%', quizAttempts: 5, passFail: 'Passed', status: 'Approved' },
-    { id: 2, name: 'Jane Smith', email: 'jane@example.com', avgScore: '89%', quizAttempts: 3, passFail: 'Passed', status: 'Approved' },
-    { id: 3, name: 'Alice Brown', email: 'alice@example.com', avgScore: '70%', quizAttempts: 4, passFail: 'Failed', status: 'Denied' },
-    { id: 4, name: 'Bob White', email: 'bob@example.com', avgScore: '76%', quizAttempts: 5, passFail: 'Passed', status: 'Approved' },
-  ]);
-
+const StudentManagement = (props) => {
+  const tokenData = props.message;
+  const [students, setStudentList] = useState([]);
   const [selectedTab, setSelectedTab] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [grantedSearchTerm, setGrantedSearchTerm] = useState('');
@@ -17,11 +12,66 @@ const StudentManagement = () => {
   const [isSaving, setIsSaving] = useState(false);
 
   // Handle tab change
-  const handleTabChange = (tab) => {
-    if (selectedTab === tab) {
-      setSelectedTab(null);
+  const handleTabChange = async (tab) => {
+    if (tab === 'management'){
+      try {
+        const response = await fetch("http://localhost:4000/getStudentAccessList", { // change the database address to prod
+          method: "GET",
+          headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${tokenData}`
+          }
+        });
+
+        if (!response.ok) {
+          // If the response status is not ok (e.g., 400 or 401), throw an error
+          throw new Error("No database Connection. Please try again.");
+        }
+        const rawData = await response.json();
+        const students = rawData.map((student, index) => ({
+          id: student.Id,
+          name: student.student_name,
+          email: student.email,
+          status: student.status
+        }));
+        setStudentList(students);
+        setSelectedTab(tab);
+
+      } catch (err) {
+        console.error("Database Connection failed", err);
+      }
     } else {
-      setSelectedTab(tab);
+      try {
+        const response = await fetch("http://localhost:4000/getStudentDetails", { // change the database address to prod
+          method: "GET",
+          headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${tokenData}`
+          }
+        });
+
+        if (!response.ok) {
+          // If the response status is not ok (e.g., 400 or 401), throw an error
+          throw new Error("No database Connection. Please try again.");
+        }
+        const rawData = await response.json();
+        const students = rawData.map((student, index) => ({
+          id: student.Id,
+          userName: student.UserName,
+          email: student.Email,
+          firstName: student.First_Name,
+          lastName: student.Last_Name,
+          fullName: student.Student_Name,
+          contactNum: student.PhoneNum
+        }));
+        setStudentList(students);
+        setSelectedTab(tab);
+
+      } catch (err) {
+        console.error("Database Connection failed", err);
+      }
     }
   };
 
@@ -34,29 +84,27 @@ const StudentManagement = () => {
 
   // Handle student status updates
   const handleStatusChange = (id, newStatus) => {
-    setStudents(students.map(student => 
+    setStudentList(students.map(student => 
       student.id === id ? { ...student, status: newStatus } : student
     ));
   };
 
   // Filter students based on status
-  const filteredStudents = students.filter(student => {
-    const matchesSearch = student.name.toLowerCase().includes(searchTerm) || student.email.toLowerCase().includes(searchTerm);
-    const matchesStatus = statusFilter === 'All' || student.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
+  // const filteredStudents = students.filter(student => {
+  //   const matchesSearch = student.name.toLowerCase().includes(searchTerm) || student.email.toLowerCase().includes(searchTerm);
+  //   const matchesStatus = statusFilter === 'All' || student.status === statusFilter;
+  //   return matchesSearch && matchesStatus;
+  // });
 
-  // Filter granted students
-  const grantedStudents = students.filter(student => student.status === 'Approved');
+  // // Filter granted students
+  // const grantedStudents = students.filter(student => student.status === 'Approved');
   
-  const filteredGrantedStudents = grantedStudents.filter(student => {
-    return student.name.toLowerCase().includes(grantedSearchTerm) || student.email.toLowerCase().includes(grantedSearchTerm);
-  });
+  // const filteredGrantedStudents = grantedStudents.filter(student => {
+  //   return student.name.toLowerCase().includes(grantedSearchTerm) || student.email.toLowerCase().includes(grantedSearchTerm);
+  // });
 
   return (
-    <div className="student-management">
-      <h2>Student Management System</h2>
-
+    <div>
       {/* Tab Navigation */}
       <div className="tab-nav">
         <button onClick={() => handleTabChange('management')} className={selectedTab === 'management' ? 'active' : ''}>Student Login Permission</button>
@@ -82,6 +130,7 @@ const StudentManagement = () => {
           <table className="student-table">
             <thead>
               <tr>
+                <th>Id</th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Status</th>
@@ -89,8 +138,9 @@ const StudentManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {filteredStudents.map(student => (
+              {students.map(student => (
                 <tr key={student.id}>
+                  <td>{student.id}</td>
                   <td>{student.name}</td>
                   <td>{student.email}</td>
                   <td>{student.status}</td>
@@ -134,22 +184,20 @@ const StudentManagement = () => {
           <table className="student-table">
             <thead>
               <tr>
-                <th>Name</th>
+                <th>Id</th>
+                <th>User Name</th>
                 <th>Email</th>
-                <th>Average Score</th>
-                <th>Quiz Attempts</th>
-                <th>Pass/Fail</th>
+                <th>Full Name</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {filteredGrantedStudents.map(student => (
+              {students.map(student => (
                 <tr key={student.id}>
-                  <td>{student.name}</td>
+                  <td>{student.id}</td>
+                  <td>{student.userName}</td>
                   <td>{student.email}</td>
-                  <td>{student.avgScore}</td>
-                  <td>{student.quizAttempts}</td>
-                  <td>{student.passFail}</td>
+                  <td>{student.fullName}</td>
                   <td>
                     {/* Open student details in a new window */}
                     <button onClick={() => window.open(`/student-details/${student.id}`, '_blank')}>

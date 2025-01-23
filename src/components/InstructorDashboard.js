@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './InstructorDashboard.css';
 import StudentManagement from './StudentManagement';
 import Quizzes from './Quizzes';
 import Materials from './Materials';
 
 const InstructorDashboard = () => {
+  const location = useLocation();
+  const tokenData = location.state.token;
   const [activeSection, setActiveSection] = useState(null);
 
   const handleSectionChange = (section) => {
@@ -30,20 +32,20 @@ const InstructorDashboard = () => {
         
         <nav className="header-nav">
           <button
-            className={`header-nav-item ${activeSection === 'studentManagement' ? 'active' : ''}`}
-            onClick={() => handleSectionChange('studentManagement')}
+            className={`header-nav-item ${activeSection === 'Student Management System' ? 'active' : ''}`}
+            onClick={() => handleSectionChange('Student Management System')}
           >
             Student Management
           </button>
           <button
-            className={`header-nav-item ${activeSection === 'quiz' ? 'active' : ''}`}
-            onClick={() => handleSectionChange('quiz')}
+            className={`header-nav-item ${activeSection === 'Quiz Index' ? 'active' : ''}`}
+            onClick={() => handleSectionChange('Quiz Index')}
           >
             Quizzes
           </button>
           <button
-            className={`header-nav-item ${activeSection === 'materials' ? 'active' : ''}`}
-            onClick={() => handleSectionChange('materials')}
+            className={`header-nav-item ${activeSection === 'Materials' ? 'active' : ''}`}
+            onClick={() => handleSectionChange('Materials')}
           >
             Add Materials
           </button>
@@ -62,9 +64,9 @@ const InstructorDashboard = () => {
             : 'Welcome to Instructor Hub'}
         </header>
         <div className="content">
-          {activeSection === 'studentManagement' && <StudentManagement />}
-          {activeSection === 'quiz' && <Quizzes />}
-          {activeSection === 'materials' && <Materials />}
+          {activeSection === 'Student Management System' && <StudentManagement message={tokenData} />}
+          {activeSection === 'Quiz Index' && <Quizzes message={tokenData} />}
+          {activeSection === 'Materials' && <Materials message={tokenData} />}
           {!activeSection && (
             <div className="welcome">
               <h2>Welcome to Instructor Hub</h2>

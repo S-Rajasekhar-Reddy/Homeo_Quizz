@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import './StudentDashboard.css';
 import StudentProfile from './StudentProfile';
 import StudentQuizzes from './StudentQuizzes';
@@ -6,6 +7,9 @@ import Grades from './Grades';
 import StudentsSectionMaterial from './StudentsSectionMaterial';
 
 const StudentDashboard = () => {
+  const location = useLocation();
+  const tokenData = location.state.token;
+  const studentName = location.state.studentName;
   const [activeSection, setActiveSection] = useState('Welcome');
 
   const handleSectionChange = (section) => {
@@ -58,7 +62,7 @@ const StudentDashboard = () => {
         <div className="content">
           {activeSection === 'Welcome' && (
             <div className="welcome">
-              <h2>Welcome back, [Student's Name]!</h2>
+              <h2>Welcome back, {studentName}</h2>
               <p>“Success is no accident; it’s hard work and perseverance.”</p>
             </div>
           )}

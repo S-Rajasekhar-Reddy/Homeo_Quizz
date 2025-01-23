@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import CryptoJS from 'crypto-js';
 import './Login.css';
 
 const Login = () => {
@@ -8,6 +9,12 @@ const Login = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
+  const secretKey = process.env.REACT_APP_SECRET_KEY;
+
+  function encryptPassword(password) {
+    const cipherText = CryptoJS.AES.encrypt(password, secretKey).toString();
+    return cipherText;
+  }
 
   const handleLogin = async () => {
     try {
@@ -19,7 +26,7 @@ const Login = () => {
         },
         body: JSON.stringify({
           username: userName,
-          password: passWord,
+          password: encryptPassword(passWord),
         }),
       });
 
@@ -34,13 +41,13 @@ const Login = () => {
         setSuccess(true);
         setError('');
         setTimeout(() => {
-          navigate('/student-dashboard');
+          navigate('/student-dashboard', {state : data});
         }, 1000);
       } else {
         setSuccess(true);
         setError('');
         setTimeout(() => {
-          navigate('/instructor-dashboard');
+          navigate('/instructor-dashboard', {state : data});
         }, 1000);
       }
     } catch (err) {

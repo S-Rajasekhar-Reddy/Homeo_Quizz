@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './Quizzes.css';
 
-const Quizzes = () => {
+const Quizzes = (props) => {
+  const tokenData = props.message;
   const [isCreatingQuiz, setIsCreatingQuiz] = useState(false);
   const [isShowingQuizzes, setIsShowingQuizzes] = useState(false);
   const [quizzes, setQuizzes] = useState([]);
@@ -91,6 +92,7 @@ const Quizzes = () => {
         headers: {
           'Accept': 'application/json',
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${tokenData}`
         },
         body: JSON.stringify(quizzes[0]),
       });
@@ -113,6 +115,7 @@ const Quizzes = () => {
         headers: {
           'Accept': 'application/json',
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${tokenData}`
         }
       });
       
@@ -168,10 +171,17 @@ const Quizzes = () => {
         headers: {
           'Accept': 'application/json',
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${tokenData}`
         },
         body: JSON.stringify({
           quizName: quizName,
-          questionList: quiz.questionList[questionIndex]}),
+          question: editedQuestion,
+          option1: editedOptions[0],
+          option2: editedOptions[1],
+          option3: editedOptions[2],
+          option4: editedOptions[3],
+          correctAnswer: editedCorrectAnswer,
+          questionNumber: questionIndex+1}),
       });
       
       if (!response.ok) {
@@ -198,6 +208,7 @@ const Quizzes = () => {
         headers: {
           'Accept': 'application/json',
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${tokenData}`
         }
       });
       
