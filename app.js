@@ -9,8 +9,6 @@ app=express();
 
 dotenv.config();
 
-process.env.TOKEN_SECRET;
-
 // Enable CORS for all routes and origins
 app.use(cors());
 
@@ -75,6 +73,16 @@ app.get('/signout',(res,req)=>{
 });
 
 app.get('/getStudentDetails', (req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
     connection.query('SELECT * FROM Student_Details', (err, results) => {
         if (err) {
           console.error('Error executing query:', err);
@@ -86,6 +94,16 @@ app.get('/getStudentDetails', (req,res)=>{
 });
 
 app.get('/getStudentDetails/:studentId', (req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const studentId=req.params.studentId;
   connection.query('SELECT * FROM Student_Details where Id='+studentId, (err, results) => {
       if (err) {
@@ -98,6 +116,16 @@ app.get('/getStudentDetails/:studentId', (req,res)=>{
 });
 
 app.post('/updateStudentDetails/:studentId', (req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const studentId=req.params.studentId;
   const data=req.body;
   connection.query('UPDATE Student_Details set Email='+data.email+',PhoneNum='+data.phoneNum+'where Id='+studentId, (err, results) => {
@@ -111,6 +139,16 @@ app.post('/updateStudentDetails/:studentId', (req,res)=>{
 });
 
 app.post('/createQuiz',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const data=req.body;
   const query ='CREATE TABLE '+ data.quizName +'('
     +'Question_Number int NOT NULL AUTO_INCREMENT,\n'
@@ -150,6 +188,16 @@ app.post('/createQuiz',(req,res)=>{
 });
 
 app.post('/updateQuiz',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const data=req.body;
   connection.query('UPDATE '+data.quizName+' SET Question=?,Option1=?,Option2=?,Option3=?,Option4=?,Correct_Answer=? WHERE Question_Number=?',data.question,data.option1,data.option2,data.option3,data.option4,data.correctAnswer,data.questionNumber,(err)=>{
     if (err) {
@@ -169,6 +217,16 @@ app.post('/updateQuiz',(req,res)=>{
 });
 
 app.get('/getQuizes',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   connection.query('SELECT * FROM quiz_index', (err,results) => {
     if(err) {
       console.error('Error retrieving data');
@@ -180,6 +238,16 @@ app.get('/getQuizes',(req,res)=>{
 });
 
 app.get('/getQuizes/:quizName',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const quizName=req.params.quizName;
   connection.query('SELECT * FROM '+quizName, (err,results) => {
     if(err) {
@@ -192,6 +260,16 @@ app.get('/getQuizes/:quizName',(req,res)=>{
 });
 
 app.get('/getStudentAccessList', (req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   connection.query('SELECT * FROM student_access',(err,results)=>{
     if(err){
       console.error('Error executing query:',err);
@@ -203,6 +281,16 @@ app.get('/getStudentAccessList', (req,res)=>{
 });
 
 app.post('/updateAccess', (req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
     const data=req.body;
     connection.query('UPDATE student_access SET status = ? WHERE student_id = ?',data.status,data.student_id,(err,results)=>{
       if(err){
@@ -215,6 +303,16 @@ app.post('/updateAccess', (req,res)=>{
 });
 
 app.get('/studentQuizDetails',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   connection.query('SELECT * FROM student_grade',(err,results)=>{
     if(err){
       console.error('Error executing query:',err);
@@ -226,6 +324,16 @@ app.get('/studentQuizDetails',(req,res)=>{
 });
 
 app.get('/studentGrades/:studentId',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const studentId=req.params.studentId;
   connection.query('SELECT * FROM student_grade where Id='+studentId, (err, results) => {
       if (err) {
@@ -275,6 +383,16 @@ app.post('/signup', (req,res)=>{
 });
 
 app.get('/getQuizDetails/:studentId',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const studentId=req.params.studentId;
   quizList=[];
   studentQuizTable=[];
@@ -298,6 +416,16 @@ app.get('/getQuizDetails/:studentId',(req,res)=>{
 });
 
 app.post('/studentQuizSubmit',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+        if (!token) {
+            res.status(401)
+                .json(
+                    {
+                        success: false,
+                        message: "Error!Token was not provided."
+                    }
+                );
+              }
   const data=req.body;
   userName='';
   studentName='';
