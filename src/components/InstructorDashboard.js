@@ -8,7 +8,7 @@ import Materials from './Materials';
 const InstructorDashboard = () => {
   const location = useLocation();
   const tokenData = location.state.token;
-  const [activeSection, setActiveSection] = useState(null);
+  const [activeSection, setActiveSection] = useState('Welcome');
 
   const handleSectionChange = (section) => {
     setActiveSection(section);
@@ -18,17 +18,14 @@ const InstructorDashboard = () => {
     window.location.href = '/login';
   };
 
-  const handleLogoClick = () => {
-    window.location.reload();
-  };
 
   return (
     <div className="dashboard">
       {/* Header with navigation */}
       <header className="header">
-        <Link to="/instructor-dashboard" className="logo" onClick={handleLogoClick}>
+        <div className="logo" onClick={() => handleSectionChange('Welcome')}>
           Instructor<span>Hub</span>
-        </Link>
+        </div>
         
         <nav className="header-nav">
           <button
@@ -67,7 +64,7 @@ const InstructorDashboard = () => {
           {activeSection === 'Student Management System' && <StudentManagement message={tokenData} />}
           {activeSection === 'Quiz Index' && <Quizzes message={tokenData} />}
           {activeSection === 'Materials' && <Materials message={tokenData} />}
-          {!activeSection && (
+          {activeSection === 'Welcome' && (
             <div className="welcome">
               <h2>Welcome to Instructor Hub</h2>
               <p>

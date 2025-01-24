@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './StudentsSectionMaterial.css';
 
-const StudentsSectionMaterial = () => {
+const StudentsSectionMaterial = (props) => {
+  const tokenData = props.message;
   const [resources, setResources] = useState([]);
   const [loading, setLoading] = useState(true);
 

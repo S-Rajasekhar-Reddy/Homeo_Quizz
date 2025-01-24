@@ -26,7 +26,6 @@ const Materials = () => {
 
   return (
     <div className="materials">
-      <h3>Upload Materials</h3>
       <div className="upload-section">
         {/* Input for selecting files */}
         <input type="file" onChange={handleFileUpload} />

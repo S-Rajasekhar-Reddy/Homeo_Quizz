@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import './Grades.css';
 
-const Grades = () => {
+const Grades = (props) => {
+  const tokenData = props.message;
   const [quizResults, setQuizResults] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     // Simulate fetching quiz results from an API
     setTimeout(() => {
-      setQuizResults([
-        { quizName: 'Math Quiz 1', score: 85, date: '2024-12-15', status: 'Passed' },
-        { quizName: 'History Quiz 1', score: 72, date: '2024-12-10', status: 'Passed' },
-        { quizName: 'Science Quiz 1', score: 58, date: '2024-11-30', status: 'Failed' },
-        { quizName: 'Computer Science Quiz 1', score: 90, date: '2024-11-20', status: 'Passed' }
-      ]);
+      setQuizResults(props.message.params.quizData);
       setLoading(false);
-    }, 1500); // Simulate network delay
+    }, 800); // Simulate network delay
   }, []);
 
   return (
     <div className="grades">
-      <h2>Quiz Results</h2>
       {loading ? (
         <div className="loading">Loading grades...</div>
       ) : (
@@ -38,7 +33,7 @@ const Grades = () => {
               <tr key={index}>
                 <td>{result.quizName}</td>
                 <td>{result.score}%</td>
-                <td className={result.status === 'Passed' ? 'passed' : 'failed'}>
+                <td className={result.status === 'Pass' ? 'passed' : 'failed'}>
                   {result.status}
                 </td>
                 <td>{result.date}</td>

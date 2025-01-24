@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './StudentQuizzes.css';
 
-const StudentQuizzes = () => {
+const StudentQuizzes = (props) => {
+  const tokenData = props.message;
   const [quizzes, setQuizzes] = useState([
     {
       title: "React Basics",

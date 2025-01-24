@@ -8,12 +8,139 @@ import StudentsSectionMaterial from './StudentsSectionMaterial';
 
 const StudentDashboard = () => {
   const location = useLocation();
-  const tokenData = location.state.token;
+  const [message, setMessageData] = useState({
+    tokenData: location.state.token,
+    params: []
+  });
   const studentName = location.state.studentName;
   const [activeSection, setActiveSection] = useState('Welcome');
 
-  const handleSectionChange = (section) => {
-    setActiveSection(section);
+  const handleSectionChange = async (section) => {
+    if (section === 'StudentProfile') {
+
+      try {
+        const response = await fetch("http://localhost:4000/getStudentDetails/"+location.state.studentId, { // change the database address to prod
+          method: "GET",
+          headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${message.tokenData}`
+          }
+        });
+
+        if (!response.ok) {
+          // If the response status is not ok (e.g., 400 or 401), throw an error
+          throw new Error("No database Connection. Please try again.");
+        }
+        const rawData = await response.json();
+        const studentDetails = {
+          id: rawData[0].Id,
+          userName: rawData[0].UserName,
+          email: rawData[0].Email,
+          firstName: rawData[0].First_Name,
+          lastName: rawData[0].Last_Name,
+          fullName: rawData[0].Student_Name,
+          contactNum: rawData[0].PhoneNum
+        };
+        setMessageData({
+          ...message,
+          params: studentDetails
+        });
+        setActiveSection(section);
+
+      } catch (err) {
+        console.error("Database Connection failed", err);
+      }
+    } else if (section === 'Grades') {
+
+      try {
+        const response = await fetch("http://localhost:4000/studentGrades/"+location.state.studentId, { // change the database address to prod
+          method: "GET",
+          headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${message.tokenData}`
+          }
+        });
+
+        if (!response.ok) {
+          // If the response status is not ok (e.g., 400 or 401), throw an error
+          throw new Error("No database Connection. Please try again.");
+        }
+        const rawData = await response.json();
+        const studentQuizDetails = {
+          id: rawData[0].Id,
+          userName: rawData[0].Username,
+          fullName: rawData[0].Student_Name,
+          quizData: []
+        };
+        rawData.forEach((quiz) => {
+          studentQuizDetails.quizData.push({
+            quizId: quiz.Quiz_Number,
+            quizName: quiz.Quiz_Name,
+            score: ((quiz.Grade / quiz.Max_Grade) * 100).toFixed(2),
+            maxScore: quiz.Max_Grade,
+            status: (quiz.Grade / quiz.Max_Grade) * 100 > 75 ? 'Pass' : 'Fail',
+            date: new Date(quiz.Date_Attempted).toLocaleDateString("en-US"),
+            remAttempt: quiz.Rem_Attempts
+          });
+        });
+        setMessageData({
+          ...message,
+          params: studentQuizDetails
+        });
+        setActiveSection(section);
+
+      } catch (err) {
+        console.error("Database Connection failed", err);
+      }
+    } else if (section === 'StudentQuizzes') {
+      
+      try {
+        const response = await fetch("http://localhost:4000/getQuizDetails/"+location.state.studentId, { // change the database address to prod
+          method: "GET",
+          headers: {
+            'Accept': 'application/json',
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${message.tokenData}`
+          }
+        });
+
+        if (!response.ok) {
+          // If the response status is not ok (e.g., 400 or 401), throw an error
+          throw new Error("No database Connection. Please try again.");
+        }
+        
+        const rawData = await response.json();
+        const studentQuizDetails = {
+          id: rawData[0].Id,
+          userName: rawData[0].Username,
+          fullName: rawData[0].Student_Name,
+          quizData: []
+        };
+        rawData.forEach((quiz) => {
+          studentQuizDetails.quizData.push({
+            quizId: quiz.Quiz_Number,
+            quizName: quiz.Quiz_Name,
+            score: ((quiz.Grade / quiz.Max_Grade) * 100).toFixed(2),
+            maxScore: quiz.Max_Grade,
+            status: (quiz.Grade / quiz.Max_Grade) * 100 > 75 ? 'Pass' : 'Fail',
+            date: new Date(quiz.Date_Attempted).toLocaleDateString("en-US"),
+            remAttempt: quiz.Rem_Attempts
+          });
+        });
+        setMessageData({
+          ...message,
+          params: studentQuizDetails
+        });
+        setActiveSection(section);
+
+      } catch (err) {
+        console.error("Database Connection failed", err);
+      }
+    } else {
+      setActiveSection(section);
+    }
   };
 
   const handleLogoClick = () => {
@@ -66,10 +193,10 @@ const StudentDashboard = () => {
               <p>“Success is no accident; it’s hard work and perseverance.”</p>
             </div>
           )}
-          {activeSection === 'StudentProfile' && <StudentProfile />}
-          {activeSection === 'StudentQuizzes' && <StudentQuizzes />}
-          {activeSection === 'Grades' && <Grades />}
-          {activeSection === 'Study Material' && <StudentsSectionMaterial />}
+          {activeSection === 'StudentProfile' && <StudentProfile message={message}/>}
+          {activeSection === 'StudentQuizzes' && <StudentQuizzes message={message}/>}
+          {activeSection === 'Grades' && <Grades message={message}/>}
+          {activeSection === 'Study Material' && <StudentsSectionMaterial message={message}/>}
         </div>
       </main>
     </div>
