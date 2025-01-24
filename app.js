@@ -17,7 +17,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
-  database: 'homeo'
+  database: 'project_homeo'
 });
 
 app.post('/login',(req, res)=>{
@@ -355,23 +355,28 @@ app.post('/signup', (req,res)=>{
     console.log('Connected to MySQL database!');
   });
     const data=req.body;
-    id=null;
-    connection.query("INSERT INTO credentials(Username, Email , Pwd, Account_type) VALUES (?,?,?,'s')",[data.username,data.email,data.password],(err,results)=>{
-        if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).send('Error retrieving data from database');
-            return;
-          }
-          id=results[0].Id;
-    });
-    connection.query("INSERT INTO Student_details(Id, Username, Email , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?)",[id,data.username,data.email,data.firstName,data.lastName,data.fullName,data.phoneNum],(err)=>{
+    connection.query("INSERT INTO credentials(UserName, Email , Password, Account_type) VALUES (?,?,?,'s')",[data.username,data.email,data.password],(err,results)=>{
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send('Error retrieving data from database');
             return;
           }
     });
-    connection.query('SELECT * FROM Student_details where credentials=\''+id+'\'', (err) => {
+    connection.query('SELECT * FROM credentials where UserName=\''+data.username+'\'', (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);
+        res.status(500).send('Error retrieving data from database');
+        return;
+      }
+      const id=results[0].Id;
+    connection.query("INSERT INTO Student_details(Id, UserName, Email , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?)",[id,data.username,data.email,data.firstName,data.lastName,data.fullName,data.phoneNum],(err)=>{
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error retrieving data from database');
+            return;
+          }
+    });
+    connection.query('SELECT * FROM Student_details where Id=\''+id+'\'', (err) => {
       if (err) {
         console.error('Error executing query:', err);
         res.status(500).send('Error retrieving data from database');
@@ -380,6 +385,7 @@ app.post('/signup', (req,res)=>{
       res.status(200).send({'status':'Account Created Successfully!'});
     });
     connection.end();
+})
 });
 
 app.get('/getQuizDetails/:studentId',(req,res)=>{
