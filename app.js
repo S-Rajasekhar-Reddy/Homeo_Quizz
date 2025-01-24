@@ -394,16 +394,58 @@ app.get('/getQuizDetails/:studentId',(req,res)=>{
                 );
               }
   const studentId=req.params.studentId;
-  try{  
-  const [studentQuizTable]=connection.query('SELECT * FROM student_grade where Id='+studentId);
-  const [quizList]=connection.query('SELECT * FROM quiz_index');
-  res.status(200).send({"quizList":quizList,"studentQuizTable":studentQuizTable});
-}
-catch(err){
-  console.error('Error executing query:', err);
-  res.status(500).send('Error retrieving data from database');
-  return;
-}
+//   try{  
+//   const [studentQuizTable]=connection.query('SELECT * FROM student_grade where Id='+studentId);
+//   const [quizList]=connection.query('SELECT * FROM quiz_index');
+//   res.status(200).send({"quizList":quizList,"studentQuizTable":studentQuizTable});
+// }
+// catch(err){
+//   console.error('Error executing query:', err);
+//   res.status(500).send('Error retrieving data from database');
+//   return;
+// }
+//   connection.query('SELECT Quiz_Number,Quiz_Name FROM quiz_index where Quiz_Number not in(SELECT Quiz_Number FROM student_grade where Id =?)',studentId, (err, results) => {
+//     if (err) {
+//       console.error('Error executing query:', err);
+//       res.status(500).send('Error retrieving data from database');
+//       return;
+//     }
+//     res.status(200).json({results});
+// });
+    connection.query('SELECT qi.Quiz_Number, qi.Quiz_Name, COALESCE(sg.Rem_Attempts, 0) AS Rem_Attempts\n' +
+                     'FROM quiz_index qi\n'+
+                     'LEFT JOIN student_grade sg ON qi.Quiz_Number = sg.Quiz_Number AND sg.Id ='+studentId+'\n'+
+                     'WHERE sg.Quiz_Number IS NULL\n'+
+                     'OR (sg.Rem_Attempts = 1 AND sg.Id = '+studentId+')', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    res.status(200).json({results});
+});
+});
+
+app.post('/retakeQuizSubmit',(req,res)=>{
+  const token =req.headers.authorization.split(' ')[1];
+  if (!token) {
+      res.status(401)
+          .json(
+              {
+                  success: false,
+                  message: "Error!Token was not provided."
+              }
+          );
+        }
+const data=req.body;
+connection.query('UPDATE student_grade SET Grade='+data.newGrade+',Date_Attempted='+data.date+',Rem_Attempts=0 WHERE Id='+data.studentId, (err, results) => {
+  if (err) {
+    console.error('Error executing query:', err);
+    res.status(500).send('Error retrieving data from database');
+    return;
+  }
+  res.status(200).send({"message":"Quiz re Submitted"});
+});
 });
 
 app.post('/studentQuizSubmit',(req,res)=>{
