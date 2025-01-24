@@ -128,7 +128,7 @@ app.post('/updateStudentDetails/:studentId', (req,res)=>{
               }
   const studentId=req.params.studentId;
   const data=req.body;
-  connection.query('UPDATE Student_Details set Email='+data.email+',PhoneNum='+data.phoneNum+'where Id='+studentId, (err, results) => {
+  connection.query('UPDATE Student_Details set Email=?,PhoneNum=? where Id='+studentId,[data.email,data.contactNum], (err, results) => {
       if (err) {
         console.error('Error executing query:', err);
         res.status(500).send('Error retrieving data from database');
@@ -292,7 +292,7 @@ app.post('/updateAccess', (req,res)=>{
                 );
               }
     const data=req.body;
-    connection.query('UPDATE student_access SET status = ? WHERE student_id = ?',data.status,data.student_id,(err,results)=>{
+    connection.query('UPDATE student_access SET status = ? WHERE student_id = ?',[data.status,data.student_id],(err,results)=>{
       if(err){
         console.error('Error executing query:',err);
         res.status(500).send('Error updating student access');
@@ -356,7 +356,7 @@ app.post('/signup', (req,res)=>{
   });
     const data=req.body;
     id=null;
-    connection.query("INSERT INTO credentials(Username, Email , Pwd, Account_type) VALUES (?,?,?,'s')",data.username,data.email,data.password,(err,results)=>{
+    connection.query("INSERT INTO credentials(Username, Email , Pwd, Account_type) VALUES (?,?,?,'s')",[data.username,data.email,data.password],(err,results)=>{
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send('Error retrieving data from database');
@@ -364,7 +364,7 @@ app.post('/signup', (req,res)=>{
           }
           id=results[0].Id;
     });
-    connection.query("INSERT INTO Student_details(Id, Username, Email , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?)",id,data.username,data.email,data.firstName,data.lastName,data.fullName,data.phoneNum,(err)=>{
+    connection.query("INSERT INTO Student_details(Id, Username, Email , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?)",[id,data.username,data.email,data.firstName,data.lastName,data.fullName,data.phoneNum],(err)=>{
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send('Error retrieving data from database');
@@ -438,7 +438,7 @@ app.post('/studentQuizSubmit',(req,res)=>{
     userName=results[0].Username;
     studentName=results[0].Student_Name;
   });
-  connection.query('INSERT INTO student_grade(Id,Username,Student_Name,Quiz_Number,Quiz_Name,Grade,Max_Grade,Date_Attempted) VALUES (?,?,?,?,?,?,?,?)',data.studentId,data.quizNumber,data.quizName,data.grade,data.maxGrade,data.date,(err)=>{
+  connection.query('INSERT INTO student_grade(Id,Username,Student_Name,Quiz_Number,Quiz_Name,Grade,Max_Grade,Date_Attempted) VALUES (?,?,?,?,?,?,?,?)',[data.studentId,data.quizNumber,data.quizName,data.grade,data.maxGrade,data.date],(err)=>{
     if(err){
       console.error('Error executing query:',err);
       res.status(500).send('Error submitting quiz');
