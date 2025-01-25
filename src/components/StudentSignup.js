@@ -5,11 +5,13 @@ import './StudentSignup.css';
 const StudentSignup = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
-    mobile: '',
+    firstName: '',
+    lastName: '',
+    fullName: '',
+    phoneNum: '',
     email: '',
     password: '',
+    username: '', 
     confirmPassword: ''
   });
   const [error, setError] = useState('');
@@ -20,7 +22,7 @@ const StudentSignup = () => {
     const { name, value } = e.target;
 
     // Prevent alphabets in mobile number
-    if (name === "mobile" && !/^\d*$/.test(value)) {
+    if (name === "phoneNum" && !/^\d*$/.test(value)) {
       return;
     }
 
@@ -44,14 +46,62 @@ const StudentSignup = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSignup = () => {
-    if (!formData.firstname || !formData.lastname || !formData.mobile || !formData.email || !formData.password || !formData.confirmPassword) {
+  const checkUsername = async () => {
+    try {
+      const response = await fetch(`http://localhost:4000/usernameVerification`, { // change the database address to prod
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ username:formData.username }),
+      });
+
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
+      }
+
+      return True;
+
+    } catch (err) { 
+      console.error("Database Connection failed", err);
+    }
+  };
+
+  const handleSignup = async () => {
+    setFormData({ ...formData, fullName: `${formData.firstName} ${formData.lastName}` });
+    if (!formData.firstName || !formData.lastName || !formData.phoneNum || !formData.email || !formData.password || !formData.confirmPassword || !formData.username) {
       setError('All fields are required!');
     } else if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match!');
     } else {
-      setError('');
-      setShowPopup(true);  // Show the success message popup
+      if (checkUsername(formData.username)) {
+        try {
+          
+          const response = await fetch("http://localhost:4000/signup", { // change the database address to prod
+            method: "POST",
+            headers: {
+              'Accept': 'application/json',
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(formData),
+          });
+          
+          if (!response.ok) {
+            // If the response status is not ok (e.g., 400 or 401), throw an error
+            throw new Error("No database Connection. Please try again.");
+          }
+    
+          setError('');
+          setShowPopup(true);  // Show the success message popup
+          
+        } catch (err) {
+          console.error("Database Connection failed", err);
+        }
+      } else {
+        setError('Username already exists!');
+      }
     }
   };
 
@@ -75,31 +125,30 @@ const StudentSignup = () => {
         <div className="name-fields">
           <input
             type="text"
-            name="firstname"
+            name="firstName"
             className="signup-input"
             placeholder="First Name"
-            value={formData.firstname}
+            value={formData.firstName}
             onChange={handleInputChange}
           />
           <input
             type="text"
-            name="lastname"
+            name="lastName"
             className="signup-input"
             placeholder="Last Name"
-            value={formData.lastname}
+            value={formData.lastName}
             onChange={handleInputChange}
           />
         </div>
 
-        <input
-          type="tel"
-          name="mobile"
-          className="signup-input"
-          placeholder="Mobile Number"
-          value={formData.mobile}
-          onChange={handleInputChange}
-          maxLength="10"
-        />
+          <input
+            type="text"
+            name="username"
+            className="signup-input"
+            placeholder="User Name"
+            value={formData.username}
+            onChange={handleInputChange}
+          />
 
         <input
           type="email"
@@ -108,6 +157,16 @@ const StudentSignup = () => {
           placeholder="Email"
           value={formData.email}
           onChange={handleInputChange}
+        />
+        
+        <input
+          type="tel"
+          name="phoneNum"
+          className="signup-input"
+          placeholder="Mobile Number"
+          value={formData.phoneNum}
+          onChange={handleInputChange}
+          maxLength="10"
         />
 
         <input
