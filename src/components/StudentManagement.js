@@ -85,18 +85,18 @@ const StudentManagement = (props) => {
 
   // REDO: below filter results functionality is getting crashed due to tolowercase conversion when integrated with backend
   // Filter students based on status
-  // const filteredStudents = students.filter(student => {
-  //   const matchesSearch = student.name.toLowerCase().includes(searchTerm) || student.email.toLowerCase().includes(searchTerm);
-  //   const matchesStatus = statusFilter === 'All' || student.status === statusFilter;
-  //   return matchesSearch && matchesStatus;
-  // });
+  const filteredStudents = students.filter(student => {
+    const matchesSearch = student.fullName.toString().toLowerCase().includes(searchTerm) || student.email.toString().toLowerCase().includes(searchTerm);
+    const matchesStatus = statusFilter === 'All' || student.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
-  // // Filter granted students
-  // const grantedStudents = students.filter(student => student.status === 'Approved');
+  // Filter granted students
+  const grantedStudents = students.filter(student => student.status === 'Approved');
   
-  // const filteredGrantedStudents = grantedStudents.filter(student => {
-  //   return student.name.toLowerCase().includes(grantedSearchTerm) || student.email.toLowerCase().includes(grantedSearchTerm);
-  // });
+  const filteredGrantedStudents = grantedStudents.filter(student => {
+    return student.fullName.toLowerCase().includes(grantedSearchTerm) || student.email.toString().toLowerCase().includes(grantedSearchTerm);
+  });
 
   return (
     <div>
@@ -133,7 +133,7 @@ const StudentManagement = (props) => {
               </tr>
             </thead>
             <tbody>
-              {students.map(student => (
+              {filteredStudents.map(student => (
                 <tr key={student.id}>
                   <td>{student.id}</td>
                   <td>{student.fullName}</td>
@@ -187,7 +187,7 @@ const StudentManagement = (props) => {
               </tr>
             </thead>
             <tbody>
-              {students.map(student => (
+              {filteredGrantedStudents.map(student => (
                 <tr key={student.id}>
                   <td>{student.id}</td>
                   <td>{student.userName}</td>
