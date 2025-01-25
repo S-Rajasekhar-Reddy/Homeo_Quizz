@@ -324,6 +324,58 @@ app.get('/studentGrades/:studentId',(req,res)=>{
     });
 });
 
+app.post('/usernameVerification', (req,res)=>{
+  connection.connect((err)=>{
+    if (err) {
+      console.error('Error connecting to database:', err);
+      res.status(500).send('Error Connecting to database')
+      return;
+    }
+    console.log('Connected to MySQL database!');
+  });
+  const data=req.body;
+  connection.query('SELECT * FROM credentials where UserName=\''+data.username+'\'', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    console.log(results.length);
+    if(results.length===0){
+      res.status(200).send('Username is valid');
+    }
+    else{
+      res.status(400).send('Username already exists');
+    }
+  });
+});
+
+app.post('/usernameVerification', (req,res)=>{
+  connection.connect((err)=>{
+    if (err) {
+      console.error('Error connecting to database:', err);
+      res.status(500).send('Error Connecting to database')
+      return;
+    }
+    console.log('Connected to MySQL database!');
+  });
+  const data=req.body;
+  connection.query('SELECT * FROM credentials where UserName=\''+data.username+'\'', (err, results) => {
+    if (err) {
+      console.error('Error executing query:', err);
+      res.status(500).send('Error retrieving data from database');
+      return;
+    }
+    console.log(results.length);
+    if(results.length===0){
+      res.status(200).send('Username is valid');
+    }
+    else{
+      res.status(400).send('Username already exists');
+    }
+  });
+});
+
 app.post('/signup', (req,res)=>{
   connection.connect((err) => {
     if (err) {
@@ -354,6 +406,14 @@ app.post('/signup', (req,res)=>{
             res.status(500).send('Error retrieving data from database');
             return;
           }
+    });  
+    connection.query("INSERT INTO student_Access(Id, student_name, email, status) VALUES (?,?,?,?)",[id,data.fullName,data.email,'Pending'],(err)=>{
+        if (err) {
+            console.error('Error executing query:', err);
+            res.status(500).send('Error retrieving data from database');
+            return;
+          }
+          res.status(200).send({'status':'Account Created Successfully!'});
     });
     connection.end();
 })
