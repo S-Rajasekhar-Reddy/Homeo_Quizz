@@ -13,65 +13,36 @@ const StudentManagement = (props) => {
 
   // Handle tab change
   const handleTabChange = async (tab) => {
-    if (tab === 'management'){
-      try {
-        const response = await fetch("http://localhost:4000/getStudentAccessList", { // change the database address to prod
-          method: "GET",
-          headers: {
-            'Accept': 'application/json',
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${tokenData}`
-          }
-        });
-
-        if (!response.ok) {
-          // If the response status is not ok (e.g., 400 or 401), throw an error
-          throw new Error("No database Connection. Please try again.");
+    try {
+      const response = await fetch("http://localhost:4000/getStudentDetails", { // change the database address to prod
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${tokenData}`
         }
-        const rawData = await response.json();
-        const students = rawData.map((student, index) => ({
-          id: student.Id,
-          name: student.student_name,
-          email: student.email,
-          status: student.status
-        }));
-        setStudentList(students);
-        setSelectedTab(tab);
-
-      } catch (err) {
-        console.error("Database Connection failed", err);
+      });
+      
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
       }
-    } else {
-      try {
-        const response = await fetch("http://localhost:4000/getStudentDetails", { // change the database address to prod
-          method: "GET",
-          headers: {
-            'Accept': 'application/json',
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${tokenData}`
-          }
-        });
-
-        if (!response.ok) {
-          // If the response status is not ok (e.g., 400 or 401), throw an error
-          throw new Error("No database Connection. Please try again.");
-        }
-        const rawData = await response.json();
-        const students = rawData.map((student, index) => ({
-          id: student.Id,
-          userName: student.UserName,
-          email: student.Email,
-          firstName: student.First_Name,
-          lastName: student.Last_Name,
-          fullName: student.Student_Name,
-          contactNum: student.PhoneNum
-        }));
-        setStudentList(students);
-        setSelectedTab(tab);
-
-      } catch (err) {
+      const rawData = await response.json();
+      const students = rawData.map((student, index) => ({
+        id: student.Id,
+        userName: student.UserName,
+        email: student.Email,
+        status: student.Status,
+        firstName: student.First_Name,
+        lastName: student.Last_Name,
+        fullName: student.Student_Name,
+        contactNum: student.PhoneNum
+      }));
+      setStudentList(students);
+      setSelectedTab(tab);
+      
+    } catch (err) {
         console.error("Database Connection failed", err);
-      }
     }
   };
 
@@ -83,10 +54,33 @@ const StudentManagement = (props) => {
   };
 
   // Handle student status updates
-  const handleStatusChange = (id, newStatus) => {
-    setStudentList(students.map(student => 
-      student.id === id ? { ...student, status: newStatus } : student
-    ));
+  const handleStatusChange = async(id, newStatus) => {
+    try {
+
+      const response = await fetch("http://localhost:4000/updateAccess", {
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${tokenData}`
+        },
+        body: JSON.stringify({
+          student_id: id,
+          status: newStatus
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update student status. Please try again.");
+      }
+
+      setStudentList(students.map(student => 
+        student.id === id ? { ...student, status: newStatus } : student
+      ));
+
+    } catch (err) {
+      console.error("Database Connection failed", err);
+    }
   };
 
   // REDO: below filter results functionality is getting crashed due to tolowercase conversion when integrated with backend
@@ -142,7 +136,7 @@ const StudentManagement = (props) => {
               {students.map(student => (
                 <tr key={student.id}>
                   <td>{student.id}</td>
-                  <td>{student.name}</td>
+                  <td>{student.fullName}</td>
                   <td>{student.email}</td>
                   <td>{student.status}</td>
                   <td>

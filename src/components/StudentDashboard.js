@@ -12,6 +12,7 @@ const StudentDashboard = () => {
     tokenData: location.state.token,
     params: []
   });
+  const isNavVisible = location.state.Status === 'Approved' ? true : false;
   const studentName = location.state.studentName;
   const [activeSection, setActiveSection] = useState('Welcome');
 
@@ -68,6 +69,14 @@ const StudentDashboard = () => {
           throw new Error("No database Connection. Please try again.");
         }
         const rawData = await response.json();
+        if (rawData.length === 0) {
+          setMessageData({
+            ...message,
+            params: []
+          });
+          setActiveSection(section);
+          return;
+        }
         const studentQuizDetails = {
           id: rawData[0].Id,
           userName: rawData[0].Username,
@@ -85,6 +94,7 @@ const StudentDashboard = () => {
             remAttempt: quiz.Rem_Attempts
           });
         });
+
         setMessageData({
           ...message,
           params: studentQuizDetails
@@ -160,7 +170,7 @@ const StudentDashboard = () => {
         <div className="logo" onClick={handleLogoClick}>
           Student Dashboard
         </div>
-        <nav className="header-nav">
+        {isNavVisible && (<nav className="header-nav">
           <button onClick={() => handleSectionChange('StudentProfile')} className="header-nav-item">
             Student Profile
           </button>
@@ -174,6 +184,7 @@ const StudentDashboard = () => {
             Study Resources
           </button>
         </nav>
+        )}
         <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>
@@ -189,8 +200,9 @@ const StudentDashboard = () => {
         <div className="content">
           {activeSection === 'Welcome' && (
             <div className="welcome">
-              <h2>Welcome back, {studentName}</h2>
-              <p>“Success is no accident; it’s hard work and perseverance.”</p>
+              <h2>Welcome  <b>{studentName}</b></h2>
+              {isNavVisible && (<p>“Success is no accident; it’s hard work and perseverance.”</p>)}
+              {!isNavVisible && (<p>Please contact the instructor for student dashboard permissions.</p>)}
             </div>
           )}
           {activeSection === 'StudentProfile' && <StudentProfile message={message}/>}
