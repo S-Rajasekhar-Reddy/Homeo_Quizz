@@ -56,7 +56,7 @@ app.post('/login',(req, res)=>{
               res.status(500).send('Error retrieving data from database');
               return;
             }
-            res.status(200).send({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Status":results[0].Status,"Account_type":results[0].Account_type,"token":token});
+            res.status(200).json({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Status":newResults[0].Status,"Account_type":results[0].Account_type,"token":token});
               
         });
         }
@@ -271,7 +271,7 @@ app.post('/updateAccess', (req,res)=>{
                 );
               }
     const data=req.body;
-    connection.query('UPDATE student_details SET Status = ? WHERE student_id = ?',[data.status,data.student_id],(err,results)=>{
+    connection.query('UPDATE student_details SET Status = ? WHERE Id = ?',[data.status,data.student_id],(err,results)=>{
       if(err){
         console.error('Error executing query:',err);
         res.status(500).send('Error updating student access');
