@@ -56,7 +56,7 @@ app.post('/login',(req, res)=>{
               res.status(500).send('Error retrieving data from database');
               return;
             }
-            res.status(200).send({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Account_type":results[0].Account_type,"token":token});
+            res.status(200).send({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Status":results[0].Status,"Account_type":results[0].Account_type,"token":token});
               
         });
         }
@@ -259,27 +259,6 @@ app.get('/getQuizes/:quizName',(req,res)=>{
   });
 });
 
-app.get('/getStudentAccessList', (req,res)=>{
-  const token =req.headers.authorization.split(' ')[1];
-        if (!token) {
-            res.status(401)
-                .json(
-                    {
-                        success: false,
-                        message: "Error!Token was not provided."
-                    }
-                );
-              }
-  connection.query('SELECT * FROM student_access',(err,results)=>{
-    if(err){
-      console.error('Error executing query:',err);
-      res.status(500).send('Error getting student access details');
-      return;
-    }
-    res.status(200).json(results);
-  });
-});
-
 app.post('/updateAccess', (req,res)=>{
   const token =req.headers.authorization.split(' ')[1];
         if (!token) {
@@ -292,7 +271,7 @@ app.post('/updateAccess', (req,res)=>{
                 );
               }
     const data=req.body;
-    connection.query('UPDATE student_access SET status = ? WHERE student_id = ?',[data.status,data.student_id],(err,results)=>{
+    connection.query('UPDATE student_details SET Status = ? WHERE student_id = ?',[data.status,data.student_id],(err,results)=>{
       if(err){
         console.error('Error executing query:',err);
         res.status(500).send('Error updating student access');
@@ -369,20 +348,12 @@ app.post('/signup', (req,res)=>{
         return;
       }
       const id=results[0].Id;
-    connection.query("INSERT INTO Student_details(Id, UserName, Email , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?)",[id,data.username,data.email,data.firstName,data.lastName,data.fullName,data.phoneNum],(err)=>{
+    connection.query("INSERT INTO Student_details(Id, UserName, Email, Status , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?,?)",[id,data.username,data.email,'Pending',data.firstName,data.lastName,data.fullName,data.phoneNum],(err)=>{
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send('Error retrieving data from database');
             return;
           }
-    });  
-    connection.query("INSERT INTO student_Access(Id, student_name, email, status) VALUES (?,?,?,?)",[id,data.fullName,data.email,'pending'],(err)=>{
-        if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).send('Error retrieving data from database');
-            return;
-          }
-          res.status(200).send({'status':'Account Created Successfully!'});
     });
     connection.end();
 })
