@@ -56,7 +56,7 @@ app.post('/login',(req, res)=>{
               res.status(500).send('Error retrieving data from database');
               return;
             }
-            res.status(200).json({"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Status":newResults[0].Status,"Account_type":results[0].Account_type,"token":token});
+            res.status(200).json({"userName":username,"studentName":newResults[0].Student_Name,"studentId":newResults[0].Id,"Status":newResults[0].Status,"Account_type":results[0].Account_type,"token":token});
               
         });
         }
@@ -475,7 +475,7 @@ app.post('/retakeQuizSubmit',(req,res)=>{
           );
         }
 const data=req.body;
-connection.query('UPDATE student_grade SET Grade='+data.newGrade+',Date_Attempted='+data.date+',Rem_Attempts=0 WHERE Id='+data.studentId, (err, results) => {
+connection.query('UPDATE student_grade SET Grade=?,Date_Attempted=?,Rem_Attempts=0 WHERE Id=?',[data.grade,data.date,data.studentId], (err, results) => {
   if (err) {
     console.error('Error executing query:', err);
     res.status(500).send('Error retrieving data from database');
@@ -499,16 +499,7 @@ app.post('/studentQuizSubmit',(req,res)=>{
   const data=req.body;
   userName='';
   studentName='';
-  connection.query('SELECT * FROM student_details where id=\''+data.studentId+'\'', (err, results) => {
-    if (err) {
-      console.error('Error executing query:', err);
-      res.status(500).send('Error retrieving data from database');
-      return;
-    }
-    userName=results[0].Username;
-    studentName=results[0].Student_Name;
-  });
-  connection.query('INSERT INTO student_grade(Id,Username,Student_Name,Quiz_Number,Quiz_Name,Grade,Max_Grade,Date_Attempted) VALUES (?,?,?,?,?,?,?,?)',[data.studentId,data.quizNumber,data.quizName,data.grade,data.maxGrade,data.date],(err)=>{
+  connection.query('INSERT INTO student_grade(Id,Username,Student_Name,Quiz_Number,Quiz_Name,Grade,Max_Grade,Date_Attempted,Rem_Attempts) VALUES (?,?,?,?,?,?,?,?,?)',[data.studentId,data.userName,data.fullName,data.quizNumber,data.quizName,data.grade,data.maxGrade,data.date,0],(err)=>{
     if(err){
       console.error('Error executing query:',err);
       res.status(500).send('Error submitting quiz');
