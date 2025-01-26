@@ -2,52 +2,49 @@ import React, { useState } from 'react';
 import './StudentQuizzes.css';
 
 const StudentQuizzes = (props) => {
-  const tokenData = props.message;
-  const [quizzes, setQuizzes] = useState([
-    {
-      title: "React Basics",
-      description: "Test your knowledge of React fundamentals.",
-      questions: [
-        {
-          questionText: "What is React?",
-          options: ["A library", "A framework", "A database", "A language"],
-          correctAnswer: "A library",
-        },
-        {
-          questionText: "What hook is used for state in React?",
-          options: ["useEffect", "useState", "useContext", "useReducer"],
-          correctAnswer: "useState",
-        },
-      ],
-    },
-    {
-      title: "JavaScript Essentials",
-      description: "Test your knowledge of basic JavaScript concepts.",
-      questions: [
-        {
-          questionText: "Which method is used to add an element at the end of an array?",
-          options: ["push()", "pop()", "shift()", "unshift()"],
-          correctAnswer: "push()",
-        },
-        {
-          questionText: "What does 'NaN' stand for in JavaScript?",
-          options: ["Not a Number", "New Array", "No Array", "Not Null"],
-          correctAnswer: "Not a Number",
-        },
-      ],
-    },
-  ]);
+  const studentData = props.message;
+  const [quizList, setQuizList] = useState(props.message.params.quizList);
 
   const [currentQuizIndex, setCurrentQuizIndex] = useState(null);
   const [answers, setAnswers] = useState([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [score, setScore] = useState(0);
 
-  const startQuiz = (index) => {
-    setCurrentQuizIndex(index);
-    setAnswers(new Array(quizzes[index].questions.length).fill(''));
-    setQuizCompleted(false);
-    setScore(0);
+  const startQuiz = async (index) => {
+
+    try {
+      const response = await fetch("http://localhost:4000/getQuizes/"+quizList[index].quizName, { // change the database address to prod
+        method: "GET",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${studentData.tokenData}`
+        }
+      });
+
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
+      }
+      
+      const rawData = await response.json();
+      const questionList = rawData.map((eachQuestion) => {
+          return {
+            questionText: eachQuestion.Question,
+            options: [eachQuestion.Option1, eachQuestion.Option2, eachQuestion.Option3, eachQuestion.Option4],
+            correctAnswer: eachQuestion.Correct_Answer
+          };
+      });
+      quizList[index].questions = questionList;
+      setQuizList([...quizList]);
+      setCurrentQuizIndex(index);
+      setAnswers(new Array(quizList[index].questions.length).fill(''));
+      setQuizCompleted(false);
+      setScore(0);
+
+    } catch (err) {
+      console.error("Database Connection failed", err);
+    }
   };
 
   const handleAnswerChange = (e, questionIndex) => {
@@ -56,16 +53,48 @@ const StudentQuizzes = (props) => {
     setAnswers(updatedAnswers);
   };
 
-  const submitQuiz = () => {
-    const correctAnswers = quizzes[currentQuizIndex].questions.map(
+  const submitQuiz = async () => {
+    const correctAnswers = quizList[currentQuizIndex].questions.map(
       (question, index) => question.correctAnswer === answers[index]
     );
-    const totalScore = correctAnswers.filter(Boolean).length;
-    setScore(totalScore);
-    setQuizCompleted(true);
+    const totalScore = correctAnswers.filter(Boolean).length - (quizList[currentQuizIndex].questions.length - correctAnswers.filter(Boolean).length);
+    const query = quizList[currentQuizIndex].remattempt === 0 ? 'studentQuizSubmit' : 'retakeQuizSubmit';
+    try {
+      const response = await fetch("http://localhost:4000/"+query, { // change the database address to prod
+        method: "POST",
+        headers: {
+          'Accept': 'application/json',
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${studentData.tokenData}`
+        },
+        body: JSON.stringify({
+          studentId: studentData.params.id,
+          userName: studentData.params.userName,
+          fullName: studentData.params.fullName,
+          quizNumber: quizList[currentQuizIndex].quizId,
+          quizName: quizList[currentQuizIndex].quizName,
+          grade: totalScore,
+          maxGrade: quizList[currentQuizIndex].questions.length,
+          date: new Date()
+        })
+      });
+
+      if (!response.ok) {
+        // If the response status is not ok (e.g., 400 or 401), throw an error
+        throw new Error("No database Connection. Please try again.");
+      }
+      const rawData = await response.json();
+      setScore(totalScore);
+      setQuizCompleted(true);
+
+    } catch (err) {
+      console.error("Database Connection failed", err);
+    } 
   };
 
   const closeQuiz = () => {
+    const updatedQuizList = [...quizList.slice(0, currentQuizIndex), ...quizList.slice(currentQuizIndex+1)];
+    setQuizList(updatedQuizList); // Remove the completed quiz from the quiz list 
     setQuizCompleted(false); // Reset the quizCompleted state
     setCurrentQuizIndex(null); // Reset the current quiz index
   };
@@ -75,32 +104,31 @@ const StudentQuizzes = (props) => {
       {/* Dynamic Heading */}
       <h2>{quizCompleted ? "Results" : "Available Quizzes"}</h2>
 
-      {quizzes.length === 0 ? (
+      {quizList.length === 0 ? (
         <div className="no-quizzes">
           <p>No quizzes available right now. Stay tuned for upcoming challenges!</p>
         </div>
       ) : currentQuizIndex === null ? (
         <ul className="quiz-list">
-          {quizzes.map((quiz, index) => (
-            <li key={index} className="quiz-item">
-              <h3>{quiz.title}</h3>
-              <p>{quiz.description}</p>
+          {quizList.map((quiz, index) => (
+            <li key={quiz.quizId} className="quiz-item">
+              <p>{quiz.quizName}</p>
               <button
                 className="start-quiz-btn"
                 onClick={() => startQuiz(index)}
               >
-                Start Quiz
+                {quiz.remattempt === 0 ? 'Start Quiz' : 'Retake Quiz'}
               </button>
             </li>
           ))}
         </ul>
       ) : (
         <div className="quiz-taking">
-          <h3>{quizzes[currentQuizIndex].title}</h3>
+          <h3>{quizList[currentQuizIndex].quizName}</h3>
           {!quizCompleted ? (
             <>
               <form>
-                {quizzes[currentQuizIndex].questions.map((question, index) => (
+                {quizList[currentQuizIndex].questions.map((question, index) => (
                   <div key={index} className="question">
                     <p>{question.questionText}</p>
                     <div className="options">
@@ -131,7 +159,7 @@ const StudentQuizzes = (props) => {
           ) : (
             <div className="quiz-result">
               <h4>Quiz Completed!</h4>
-              <p>Your score: {score} / {quizzes[currentQuizIndex].questions.length}</p>
+              <p>Your score: {score} / {quizList[currentQuizIndex].questions.length}</p>
               <button className="close-quiz-btn" onClick={closeQuiz}>
                 Close Quiz
               </button>

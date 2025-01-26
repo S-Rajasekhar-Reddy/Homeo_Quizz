@@ -122,26 +122,30 @@ const StudentDashboard = () => {
         }
         
         const rawData = await response.json();
-        const studentQuizDetails = {
-          id: rawData[0].Id,
-          userName: rawData[0].Username,
-          fullName: rawData[0].Student_Name,
-          quizData: []
+        if (rawData.results.length === 0) {
+          setMessageData({
+            ...message,
+            params: []
+          });
+          setActiveSection(section);
+          return;
+        }
+        const quizListDetails = {
+          id: location.state.studentId,
+          userName: location.state.userName,
+          fullName: studentName,
+          quizList: []
         };
-        rawData.forEach((quiz) => {
-          studentQuizDetails.quizData.push({
+        rawData.results.forEach((quiz) => {
+          quizListDetails.quizList.push({
             quizId: quiz.Quiz_Number,
             quizName: quiz.Quiz_Name,
-            score: ((quiz.Grade / quiz.Max_Grade) * 100).toFixed(2),
-            maxScore: quiz.Max_Grade,
-            status: (quiz.Grade / quiz.Max_Grade) * 100 > 75 ? 'Pass' : 'Fail',
-            date: new Date(quiz.Date_Attempted).toLocaleDateString("en-US"),
-            remAttempt: quiz.Rem_Attempts
+            remattempt: quiz.Rem_Attempts,
           });
         });
         setMessageData({
           ...message,
-          params: studentQuizDetails
+          params: quizListDetails
         });
         setActiveSection(section);
 
