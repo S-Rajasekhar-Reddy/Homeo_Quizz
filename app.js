@@ -4,6 +4,7 @@ const mysql = require('mysql2');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
 const CryptoJS = require('crypto-js');
+const e = require('express');
 
 app=express();
 
@@ -254,6 +255,9 @@ app.get('/getQuizes/:quizName',(req,res)=>{
       console.error('Error retrieving data');
       res.status(500).send('Error retrieving data from database');
       return;
+    }
+    for(item in results) {
+      results[item].Correct_Answer=enryptPassword(results[item].Correct_Answer);
     }
     res.status(200).json(results);
   });
@@ -532,4 +536,9 @@ function generateAccessToken(username) {
 function decryptPassword(password){
   const bytes  = CryptoJS.AES.decrypt(password, process.env.TOKEN_SECRET);
   return bytes.toString(CryptoJS.enc.Utf8);
+}
+
+function enryptPassword(password) {
+  const cipherText = CryptoJS.AES.encrypt(password, process.env.TOKEN_SECRET).toString();
+  return cipherText;
 }
