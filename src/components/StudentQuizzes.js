@@ -49,7 +49,7 @@ const StudentQuizzes = (props) => {
   };
 
   function decryptAnswer(text){
-    const bytes  = CryptoJS.AES.decrypt(text, process.env.TOKEN_SECRET);
+    const bytes  = CryptoJS.AES.decrypt(text, process.env.REACT_APP_SECRET_KEY);
     return bytes.toString(CryptoJS.enc.Utf8);
   }
 
