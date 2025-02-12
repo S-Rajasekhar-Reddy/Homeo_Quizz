@@ -130,14 +130,14 @@ const Login = () => {
           className="image-section"
           onMouseMove={handleMouseMove} // Add mouse move event here
         >
-          <img src="/11.jpg" alt="Homeopathy" className="side-image" />
-          <img src="/12.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/1.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/2.jpg" alt="Homeopathy" className="side-image" />
           <img src="/13.jpg" alt="Homeopathy" className="side-image" />
-          <img src="/14.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/6.jpg" alt="Homeopathy" className="side-image" />
           <img src="/15.jpg" alt="Homeopathy" className="side-image" />
-          <img src="/16.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/5.jpg" alt="Homeopathy" className="side-image" />
           <img src="/17.jpg" alt="Homeopathy" className="side-image" />
-          <img src="/18.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/4.jpg" alt="Homeopathy" className="side-image" />
 
         </div>
       </div>

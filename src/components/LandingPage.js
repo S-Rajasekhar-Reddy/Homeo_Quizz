@@ -19,7 +19,7 @@ const LandingPage = () => {
     AOS.init({ duration: 1000 });
 
     // Array of all images you want to use
-    const images = ["/1.jpg", "/2.jpg", "/3.jpg", "/4.jpg", "/5.jpg", "/6.jpg"];
+    const images = ["/1.jpg", "/2.jpg", "/3.jpg", "/4.jpg", "/5_5.jpg", "/6.jpg"];
 
     // Randomly select an image
     const randomImage = images[Math.floor(Math.random() * images.length)];

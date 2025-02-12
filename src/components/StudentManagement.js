@@ -102,7 +102,7 @@ const StudentManagement = (props) => {
     <div>
       {/* Tab Navigation */}
       <div className="tab-nav">
-        <button onClick={() => handleTabChange('management')} className={selectedTab === 'management' ? 'active' : ''}>Student Login Permission</button>
+        <button onClick={() => handleTabChange('management')} className={selectedTab === 'management' ? 'active' : ''}>Login Permission</button>
         <button onClick={() => handleTabChange('granted')} className={selectedTab === 'granted' ? 'active' : ''}>My Students</button>
       </div>
 

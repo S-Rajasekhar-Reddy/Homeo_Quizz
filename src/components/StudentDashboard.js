@@ -176,7 +176,7 @@ const StudentDashboard = () => {
         </div>
         {isNavVisible && (<nav className="header-nav">
           <button onClick={() => handleSectionChange('StudentProfile')} className="header-nav-item">
-            Student Profile
+            Profile
           </button>
           <button onClick={() => handleSectionChange('StudentQuizzes')} className="header-nav-item">
             Quizzes
@@ -185,7 +185,7 @@ const StudentDashboard = () => {
             Grades
           </button>
           <button onClick={() => handleSectionChange('Study Material')} className="header-nav-item">
-            Study Resources
+            Resources
           </button>
         </nav>
         )}
@@ -201,7 +201,7 @@ const StudentDashboard = () => {
             ? 'Welcome to the Student Dashboard'
             : activeSection.replace(/([A-Z])/g, ' $1')}
         </header>
-        <div className="content">
+        <div className="contentWelcome">
           {activeSection === 'Welcome' && (
             <div className="welcome">
               <h2>Welcome  <b>{studentName}</b></h2>
