@@ -133,11 +133,15 @@ const Login = () => {
           <img src="/1.jpg" alt="Homeopathy" className="side-image" />
           <img src="/2.jpg" alt="Homeopathy" className="side-image" />
           <img src="/13.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/4.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/5_5.jpg" alt="Homeopathy" className="side-image" />
           <img src="/6.jpg" alt="Homeopathy" className="side-image" />
           <img src="/15.jpg" alt="Homeopathy" className="side-image" />
-          <img src="/5.jpg" alt="Homeopathy" className="side-image" />
-          <img src="/17.jpg" alt="Homeopathy" className="side-image" />
-          <img src="/4.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/19.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/21.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/16.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/20.jpg" alt="Homeopathy" className="side-image" />
+          <img src="/22.jpg" alt="Homeopathy" className="side-image" />
 
         </div>
       </div>
