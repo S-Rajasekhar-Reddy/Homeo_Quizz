@@ -17,6 +17,7 @@ const StudentSignup = () => {
   const [error, setError] = useState('');
   const [passwordStrength, setPasswordStrength] = useState('');
   const [showPopup, setShowPopup] = useState(false);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -48,7 +49,7 @@ const StudentSignup = () => {
 
   const checkUsername = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/usernameVerification`, { // change the database address to prod
+      const response = await fetch(`${apiUrl}/usernameVerification`, { // change the database address to prod
         method: "POST",
         headers: {
           'Accept': 'application/json',
@@ -79,7 +80,7 @@ const StudentSignup = () => {
       if (checkUsername(formData.username)) {
         try {
           
-          const response = await fetch("http://localhost:4000/signup", { // change the database address to prod
+          const response = await fetch(`${apiUrl}/signup`, { // change the database address to prod
             method: "POST",
             headers: {
               'Accept': 'application/json',

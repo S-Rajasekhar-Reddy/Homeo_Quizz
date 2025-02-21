@@ -15,12 +15,13 @@ const StudentDashboard = () => {
   const isNavVisible = location.state.Status === 'Approved' ? true : false;
   const studentName = location.state.studentName;
   const [activeSection, setActiveSection] = useState('Welcome');
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSectionChange = async (section) => {
     if (section === 'StudentProfile') {
 
       try {
-        const response = await fetch("http://localhost:4000/getStudentDetails/"+location.state.studentId, { // change the database address to prod
+        const response = await fetch(`${apiUrl}/getStudentDetails/`+location.state.studentId, { // change the database address to prod
           method: "GET",
           headers: {
             'Accept': 'application/json',
@@ -55,7 +56,7 @@ const StudentDashboard = () => {
     } else if (section === 'Grades') {
 
       try {
-        const response = await fetch("http://localhost:4000/studentGrades/"+location.state.studentId, { // change the database address to prod
+        const response = await fetch(`${apiUrl}//studentGrades/`+location.state.studentId, { // change the database address to prod
           method: "GET",
           headers: {
             'Accept': 'application/json',
@@ -107,7 +108,7 @@ const StudentDashboard = () => {
     } else if (section === 'StudentQuizzes') {
       
       try {
-        const response = await fetch("http://localhost:4000/getQuizDetails/"+location.state.studentId, { // change the database address to prod
+        const response = await fetch(`${apiUrl}//getQuizDetails/`+location.state.studentId, { // change the database address to prod
           method: "GET",
           headers: {
             'Accept': 'application/json',

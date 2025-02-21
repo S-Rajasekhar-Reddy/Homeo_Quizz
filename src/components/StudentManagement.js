@@ -8,13 +8,13 @@ const StudentManagement = (props) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [grantedSearchTerm, setGrantedSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
-
+  const apiUrl = process.env.REACT_APP_API_URL;
   const [isSaving, setIsSaving] = useState(false);
 
   // Handle tab change
   const handleTabChange = async (tab) => {
     try {
-      const response = await fetch("http://localhost:4000/getStudentDetails", { // change the database address to prod
+      const response = await fetch(`${apiUrl}/getStudentDetails`, { // change the database address to prod
         method: "GET",
         headers: {
           'Accept': 'application/json',
@@ -57,7 +57,7 @@ const StudentManagement = (props) => {
   const handleStatusChange = async(id, newStatus) => {
     try {
 
-      const response = await fetch("http://localhost:4000/updateAccess", {
+      const response = await fetch(`${apiUrl}/updateAccess`, {
         method: "POST",
         headers: {
           'Accept': 'application/json',

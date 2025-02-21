@@ -6,11 +6,12 @@ const StudentProfile = (props) => {
   const tokenData = props.message.tokenData;
   const [editMode, setEditMode] = useState(false);
   const [studentData, setStudentData] = useState(props.message.params);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleSave = async () => {
     try {
 
-      const response = await fetch("http://localhost:4000/updateStudentDetails/"+studentData.id, { // change the database address to prod
+      const response = await fetch(`${apiUrl}/updateStudentDetails/`+studentData.id, { // change the database address to prod
         method: "POST",
         headers: {
           'Accept': 'application/json',

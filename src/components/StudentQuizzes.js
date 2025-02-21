@@ -10,11 +10,12 @@ const StudentQuizzes = (props) => {
   const [answers, setAnswers] = useState([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [score, setScore] = useState(0);
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const startQuiz = async (index) => {
 
     try {
-      const response = await fetch("http://localhost:4000/getQuizes/"+quizList[index].quizName, { // change the database address to prod
+      const response = await fetch(`${apiUrl}/getQuizes/`+quizList[index].quizName, { // change the database address to prod
         method: "GET",
         headers: {
           'Accept': 'application/json',
@@ -66,7 +67,7 @@ const StudentQuizzes = (props) => {
     const totalScore = correctAnswers.filter(Boolean).length - (quizList[currentQuizIndex].questions.length - correctAnswers.filter(Boolean).length);
     const query = quizList[currentQuizIndex].remattempt === 0 ? 'studentQuizSubmit' : 'retakeQuizSubmit';
     try {
-      const response = await fetch("http://localhost:4000/"+query, { // change the database address to prod
+      const response = await fetch(`${apiUrl}/`+query, { // change the database address to prod
         method: "POST",
         headers: {
           'Accept': 'application/json',

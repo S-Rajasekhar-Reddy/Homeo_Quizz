@@ -10,6 +10,7 @@ const Login = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const secretKey = process.env.REACT_APP_SECRET_KEY;
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   function encryptPassword(password) {
     const cipherText = CryptoJS.AES.encrypt(password, secretKey).toString();
@@ -18,7 +19,7 @@ const Login = () => {
 
   const handleLogin = async () => {
     try {
-      const response = await fetch("http://localhost:4000/login", {
+      const response = await fetch(`${apiUrl}/login`, {
         method: "POST",
         headers: {
           'Accept': 'application/json',

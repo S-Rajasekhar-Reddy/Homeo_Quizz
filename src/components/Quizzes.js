@@ -17,6 +17,7 @@ const Quizzes = (props) => {
   const [editedQuestion, setEditedQuestion] = useState('');
   const [editedOptions, setEditedOptions] = useState(['', '', '', '']);
   const [editedCorrectAnswer, setEditedCorrectAnswer] = useState('');
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const handleOptionChange = (index, value) => {
     const updatedOptions = [...options];
@@ -87,7 +88,7 @@ const Quizzes = (props) => {
     setIsCreatingQuiz(false);
     setCurrentQuiz(null);
     try {
-      const response = await fetch("http://localhost:4000/createQuiz", { // change the database address to prod
+      const response = await fetch(`${apiUrl}/createQuiz`, { // change the database address to prod
         method: "POST",
         headers: {
           'Accept': 'application/json',
@@ -110,7 +111,7 @@ const Quizzes = (props) => {
 
   const handleQuizClick = async (quizName, index) => {
     try {
-      const response = await fetch("http://localhost:4000/getQuizes/"+quizName, { // change the database address to prod
+      const response = await fetch(`${apiUrl}/getQuizes/`+quizName, { // change the database address to prod
         method: "GET",
         headers: {
           'Accept': 'application/json',
@@ -166,7 +167,7 @@ const Quizzes = (props) => {
         correctAnswer: editedCorrectAnswer,
       };
 
-      const response = await fetch("http://localhost:4000/updateQuiz", { // change the database address to prod
+      const response = await fetch(`${apiUrl}/updateQuiz`, { // change the database address to prod
         method: "POST",
         headers: {
           'Accept': 'application/json',
@@ -203,7 +204,7 @@ const Quizzes = (props) => {
 
   const handleShowQuizClick = async () => {
     try {
-      const response = await fetch("http://localhost:4000/getQuizes", { // change the database address to prod
+      const response = await fetch(`${apiUrl}/getQuizes`, { // change the database address to prod
         method: "GET",
         headers: {
           'Accept': 'application/json',
