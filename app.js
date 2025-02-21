@@ -18,6 +18,7 @@ app.use(express.json());
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
+  password: 'myRDS1224',
   database: 'project_homeo'
 });
 
@@ -35,7 +36,7 @@ app.post('/login',(req, res)=>{
     connection.query('SELECT * FROM credentials where Username=\''+username+'\'', (err, results) => { 
         
         if (err) {
-          console.error('Error executing query:', err);``
+          console.error('Error executing query:', err);
           res.status(500).send('Error retrieving data from database');
           return;
         }
@@ -84,7 +85,7 @@ app.get('/getStudentDetails', (req,res)=>{
                     }
                 );
               }
-    connection.query('SELECT * FROM Student_Details', (err, results) => {
+    connection.query('SELECT * FROM student_details', (err, results) => {
         if (err) {
           console.error('Error executing query:', err);
           res.status(500).send('Error retrieving data from database');
@@ -106,7 +107,7 @@ app.get('/getStudentDetails/:studentId', (req,res)=>{
                 );
               }
   const studentId=req.params.studentId;
-  connection.query('SELECT * FROM Student_Details where Id='+studentId, (err, results) => {
+  connection.query('SELECT * FROM student_details where Id='+studentId, (err, results) => {
       if (err) {
         console.error('Error executing query:', err);
         res.status(500).send('Error retrieving data from database');
@@ -129,7 +130,7 @@ app.post('/updateStudentDetails/:studentId', (req,res)=>{
               }
   const studentId=req.params.studentId;
   const data=req.body;
-  connection.query('UPDATE Student_Details set Email=?,PhoneNum=? where Id='+studentId,[data.email,data.contactNum], (err, results) => {
+  connection.query('UPDATE student_details set Email=?,PhoneNum=? where Id='+studentId,[data.email,data.contactNum], (err, results) => {
       if (err) {
         console.error('Error executing query:', err);
         res.status(500).send('Error retrieving data from database');
@@ -404,7 +405,7 @@ app.post('/signup', (req,res)=>{
         return;
       }
       const id=results[0].Id;
-    connection.query("INSERT INTO Student_details(Id, UserName, Email, Status , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?,?)",[id,data.username,data.email,'Pending',data.firstName,data.lastName,data.fullName,data.phoneNum],(err)=>{
+    connection.query("INSERT INTO student_details(Id, UserName, Email, Status , First_Name, Last_Name, Student_Name, PhoneNum) VALUES (?,?,?,?,?,?,?,?)",[id,data.username,data.email,'Pending',data.firstName,data.lastName,data.fullName,data.phoneNum],(err)=>{
         if (err) {
             console.error('Error executing query:', err);
             res.status(500).send('Error retrieving data from database');
