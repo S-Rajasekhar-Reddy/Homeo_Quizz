@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CryptoJS from 'crypto-js';
 import './Quizzes.css';
 
 const Quizzes = (props) => {
@@ -129,7 +130,7 @@ const Quizzes = (props) => {
       rawQuizData.forEach((quiz) => {
         quizList[index].questionList.push({
         question: quiz.Question,
-        correctAnswer: quiz.Correct_Answer,
+        correctAnswer: decryptAnswer(quiz.Correct_Answer),
         options: [quiz.Option1, quiz.Option2, quiz.Option3, quiz.Option4]})
       });
       
@@ -140,6 +141,11 @@ const Quizzes = (props) => {
       console.error("Database Connection failed", err);
     }
 
+  };
+
+  function decryptAnswer(text){
+      const bytes  = CryptoJS.AES.decrypt(text, process.env.REACT_APP_SECRET_KEY);
+      return bytes.toString(CryptoJS.enc.Utf8);
   };
 
   const handleEditQuestion = (quizIndex, questionIndex) => {
