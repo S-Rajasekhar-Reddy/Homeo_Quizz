@@ -64,7 +64,7 @@ const StudentQuizzes = (props) => {
     const correctAnswers = quizList[currentQuizIndex].questions.map(
       (question, index) => question.correctAnswer === answers[index]
     );
-    const totalScore = correctAnswers.filter(Boolean).length - (quizList[currentQuizIndex].questions.length - correctAnswers.filter(Boolean).length);
+    const totalScore = (correctAnswers.filter(Boolean).length * 4) - (quizList[currentQuizIndex].questions.length - correctAnswers.filter(Boolean).length);
     const query = quizList[currentQuizIndex].remattempt === 0 ? 'studentQuizSubmit' : 'retakeQuizSubmit';
     try {
       const response = await fetch(`${apiUrl}/`+query, { // change the database address to prod
