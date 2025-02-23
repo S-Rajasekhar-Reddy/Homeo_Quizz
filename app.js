@@ -15,11 +15,14 @@ app.use(cors());
 
 app.use(express.json());
 
-const connection = mysql.createConnection({
+const connection = mysql.createPool({
   host: 'localhost',
   user: 'root',
   password: 'myRDS1224',
-  database: 'project_homeo'
+  database: 'project_homeo',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0
 });
 
 app.post('/login',(req, res)=>{
@@ -70,7 +73,6 @@ app.post('/login',(req, res)=>{
 });
 
 app.get('/signout',(res,req)=>{
-    connection.end();
     res.status(200).send('successfully logged out')
 });
 
@@ -412,8 +414,8 @@ app.post('/signup', (req,res)=>{
             return;
           }
     });  
-    connection.end();
-})
+    res.status(200).send('User Created');
+    })
 });
 
 app.get('/getQuizDetails/:studentId',(req,res)=>{
