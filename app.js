@@ -412,14 +412,6 @@ app.post('/signup', (req,res)=>{
             return;
           }
     });  
-    connection.query("INSERT INTO student_Access(Id, student_name, email, status) VALUES (?,?,?,?)",[id,data.fullName,data.email,'Pending'],(err)=>{
-        if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).send('Error retrieving data from database');
-            return;
-          }
-          res.status(200).send({'status':'Account Created Successfully!'});
-    });
     connection.end();
 })
 });
