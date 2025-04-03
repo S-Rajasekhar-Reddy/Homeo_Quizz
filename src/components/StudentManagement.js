@@ -9,10 +9,16 @@ const StudentManagement = (props) => {
   const [grantedSearchTerm, setGrantedSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
   const apiUrl = process.env.REACT_APP_API_URL;
-  const [isSaving, setIsSaving] = useState(false);
+  const [selectedStudent, setSelectedStudent] = useState(null);
+
 
   // Handle tab change
-  const handleTabChange = async (tab) => {
+  const handleTabChange = async (tab) =>  {
+    // Toggle logic: close if already active
+    if (selectedTab === tab) {
+      setSelectedTab(null);
+      return;
+    }
     try {
       const response = await fetch(`${apiUrl}/getStudentDetails`, { // change the database address to prod
         method: "GET",
@@ -45,9 +51,6 @@ const StudentManagement = (props) => {
         console.error("Database Connection failed", err);
     }
   };
-
-
-
   // Handle status filter
   const handleStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
@@ -82,7 +85,6 @@ const StudentManagement = (props) => {
       console.error("Database Connection failed", err);
     }
   };
-
   // REDO: below filter results functionality is getting crashed due to tolowercase conversion when integrated with backend
   // Filter students based on status
   const filteredStudents = students.filter(student => {
@@ -93,7 +95,6 @@ const StudentManagement = (props) => {
 
   // Filter granted students
   const grantedStudents = students.filter(student => student.status === 'Approved');
-  
   const filteredGrantedStudents = grantedStudents.filter(student => {
     return student.fullName.toLowerCase().includes(grantedSearchTerm) || student.email.toString().toLowerCase().includes(grantedSearchTerm);
   });
@@ -108,103 +109,164 @@ const StudentManagement = (props) => {
 
       {/* Student Login Permission Tab */}
       {selectedTab === 'management' && (
-        <div className="student-management-tab">
-          <input
-            type="text"
-            placeholder="Search Students"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
-            className="search-bar"
-          />
-          <select value={statusFilter} onChange={handleStatusFilterChange} className="status-filter">
-            <option value="All">All Students</option>
-            <option value="Pending">Pending</option>
-            <option value="Approved">Approved</option>
-            <option value="Denied">Denied</option>
-          </select>
-          <table className="student-table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredStudents.map(student => (
-                <tr key={student.id}>
-                  <td>{student.id}</td>
-                  <td>{student.fullName}</td>
-                  <td>{student.email}</td>
-                  <td>{student.status}</td>
-                  <td>
-                    {student.status === 'Pending' ? (
-                      <>
-                        <button onClick={() => handleStatusChange(student.id, 'Approved')}>Approve</button>
-                        <button onClick={() => handleStatusChange(student.id, 'Denied')}>Deny</button>
-                      </>
-                    ) : student.status === 'Approved' ? (
-                      <>
-                        <button onClick={() => handleStatusChange(student.id, 'Pending')}>Set Pending</button>
-                        <button onClick={() => handleStatusChange(student.id, 'Denied')}>Deny</button>
-                      </>
-                    ) : (
-                      <>
-                        <button onClick={() => handleStatusChange(student.id, 'Pending')}>Set Pending</button>
-                        <button onClick={() => handleStatusChange(student.id, 'Approved')}>Approve</button>
-                      </>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+  <div className="student-management-tab">
+    {/* Search + Filter */}
+    <div className="filter-bar">
+      <input
+        type="text"
+        placeholder="Search Students"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value.toLowerCase())}
+        className="search-bar"
+      />
 
+      <select
+        value={statusFilter}
+        onChange={handleStatusFilterChange}
+        className="status-filter"
+      >
+        <option value="All">All Students</option>
+        <option value="Pending">Pending</option>
+        <option value="Approved">Approved</option>
+        <option value="Denied">Denied</option>
+      </select>
+    </div>
+
+    {/* Header Row */}
+    <div className="card-header-row">
+      <span>ID</span>
+      <span>Name</span>
+      <span>Status</span>
+      <span>Actions</span>
+    </div>
+
+    {/* Student Card List */}
+    <div className="student-card-list">
+      {filteredStudents.map((student, index) => (
+        <div
+          className="student-card"
+          key={student.id}
+          style={{ '--i': index }}
+        >
+          <span>{student.id}</span>
+          <span>{student.fullName}</span>
+          <span>{student.status}</span>
+          <div className="student-actions">
+            <select
+              value={student.status}
+              onChange={(e) => handleStatusChange(student.id, e.target.value)}
+              className="status-dropdown"
+            >
+              <option value="Pending">Pending</option>
+              <option value="Approved">Approved</option>
+              <option value="Denied">Denied</option>
+            </select>
+          </div>
         </div>
-      )}
+      ))}
+    </div>
+  </div>
+)}
 
       {/* My Students Tab */}
       {selectedTab === 'granted' && (
-        <div className="granted-students-tab">
-          <h3>My Students</h3>
-          <input
-            type="text"
-            placeholder="Search"
-            value={grantedSearchTerm}
-            onChange={(e) => setGrantedSearchTerm(e.target.value.toLowerCase())}
-            className="search-bar"
-          />
-          <table className="student-table">
-            <thead>
-              <tr>
-                <th>Id</th>
-                <th>User Name</th>
-                <th>Email</th>
-                <th>Full Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredGrantedStudents.map(student => (
-                <tr key={student.id}>
-                  <td>{student.id}</td>
-                  <td>{student.userName}</td>
-                  <td>{student.email}</td>
-                  <td>{student.fullName}</td>
-                  <td>
-                    {/* Open student details in a new window */}
-                    <button onClick={() => window.open(`/student-details/${student.id}`, '_blank')}>
-                      View Details
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+  <div className="granted-students-tab">
+    <input
+      type="text"
+      placeholder="Search"
+      value={grantedSearchTerm}
+      onChange={(e) => setGrantedSearchTerm(e.target.value.toLowerCase())}
+      className="search-bar"
+    />
+
+    {/* Header Row */}
+    <div className="card-header-row">
+      <span>ID</span>
+      <span>Name</span>
+      <span>Status</span>
+      <span>Actions</span>
+    </div>
+
+    {/* Student Card List */}
+    <div className="student-card-list">
+      {filteredGrantedStudents.map((student, index) => (
+        <div
+          className="student-card"
+          key={student.id}
+          style={{ '--i': index }}
+        >
+          <span>{student.id}</span>
+          <span>{student.fullName}</span>
+          <span>{student.status}</span>
+          <div className="student-actions">
+            <button className="view-btn" onClick={() => setSelectedStudent(student)}>
+              View Details
+            </button>
+          </div>
         </div>
-      )}
+      ))}
+    </div>
+  </div>
+)}
+      {selectedStudent && (
+  <div style={{
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    width: '100vw',
+    height: '100vh',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 9999
+  }}>
+    <div style={{
+      backgroundColor: '#fff',
+      padding: '2rem',
+      borderRadius: '12px',
+      width: '90%',
+      maxWidth: '500px',
+      position: 'relative',
+      boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
+    }}>
+      <button 
+  onClick={() => setSelectedStudent(null)} 
+  style={{
+    position: 'absolute',
+    top: '8px',
+    right: '10px',
+    fontSize: '16px',
+    background: 'transparent',
+    border: 'none',
+    color: '#555',
+    cursor: 'pointer',
+    padding: '4px',
+    lineHeight: '1',
+    width: '28px',
+    height: '28px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    transition: 'background 0.2s ease-in-out'
+  }}
+  onMouseOver={(e) => e.currentTarget.style.background = '#f2f2f2'}
+  onMouseOut={(e) => e.currentTarget.style.background = 'transparent'}
+>
+  &times;
+</button>
+
+      <h2>Student Details</h2>
+      <p><strong>ID:</strong> {selectedStudent.id}</p>
+      <p><strong>Username:</strong> {selectedStudent.userName}</p>
+      <p><strong>Email:</strong> {selectedStudent.email}</p>
+      <p><strong>Full Name:</strong> {selectedStudent.fullName}</p>
+      <p><strong>Phone Number:</strong> {selectedStudent.contactNum}</p>
+      <p><strong>Status:</strong> {selectedStudent.status}</p>
+    </div>
+  </div>
+)}
     </div>
   );
 };

@@ -16,5 +16,4 @@ dist/
 
 # macOS system files
 .DS_Store
-
 *lock*
