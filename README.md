@@ -34,6 +34,7 @@ Ensure you have the following installed:
 
 - **Node.js** (v14+ recommended)
 - **npm** (comes with Node.js)
+- **Relational Database** (import sql file in backend folder)
 
 Clone the repository
 
@@ -62,6 +63,7 @@ npm install
 npm start
 
 ## By default, the Express server runs on http://localhost:5000
+## Make sure to create database using the .sql file in backend folder
 
 
 📦 Build Frontend for Production
